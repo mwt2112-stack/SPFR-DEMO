@@ -10,11 +10,11 @@
   #report-panel { flex: 1 1 auto; background: #fff; min-width: 0; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
   #report-static { flex-shrink: 0; background: #fff; z-index: 10; }
   #table-scroll-area { flex: 1 1 auto; overflow: auto; position: relative; }
-  .nav-bar { background: #fff; border-bottom: 1px solid #ccc; padding: 3px 10px 0px; display: flex; justify-content: space-between; align-items: flex-start; }
-  .nav-bar a { color: #00419e; text-decoration: none; font-size: 11px; font-weight: bold; white-space: nowrap; }
-  .nav-bar a:hover { text-decoration: underline; }
+  .nav-bar { background: #fff; border-bottom: 1px solid #ccc; padding: 3px 10px 0; display: flex; justify-content: space-between; align-items: flex-start; }
+  .nav-link { color: #00419e; font-size: 11px; font-weight: bold; white-space: nowrap; cursor: pointer; border-radius: 2px; padding: 0 2px; transition: background 0.12s, outline 0.12s; }
+  .nav-link:hover { background: #fff3cd; outline: 1px solid #e6a817; text-decoration: underline; }
+  .nav-link.active { background: #d0e8ff; outline: 1px solid #0056b3; }
   .nav-fds-wrap { display: flex; flex-direction: column; align-items: center; white-space: nowrap; }
-  .nav-fds-wrap a { display: block; }
   .fds-sub { font-size: 9px; color: #444; margin-top: 1px; }
   .header-block { display: flex; align-items: flex-start; padding: 5px 12px 2px; }
   .logo-area { display: flex; align-items: center; gap: 5px; min-width: 185px; flex-shrink: 0; }
@@ -25,11 +25,13 @@
   .report-titles .title-main { font-size: 12px; font-weight: bold; }
   .report-titles .title-sub { font-size: 11px; font-weight: bold; }
   .report-titles .title-date { font-size: 11px; }
-  .meta-section { padding: 4px 12px 4px; display: grid; grid-template-columns: 210px 1fr auto; column-gap: 12px; row-gap: 1px; font-size: 11px; border-bottom: 1px solid #888; }
-  .meta-col { display: flex; flex-direction: column; gap: 1.5px; }
-  .meta-row { display: flex; gap: 3px; }
+  .meta-section { padding: 4px 12px 4px; display: grid; grid-template-columns: 210px 1.28fr 235px; column-gap: 26px; row-gap: 1px; font-size: 11px; border-bottom: 1px solid #888; align-items: start; }
+  .meta-col { display: flex; flex-direction: column; gap: 1.5px; min-width: 0; }
+  .meta-row { display: flex; gap: 3px; min-width: 0; white-space: nowrap; }
   .meta-label { font-weight: bold; white-space: nowrap; }
-  .run-col { text-align: right; display: flex; flex-direction: column; gap: 1.5px; align-items: flex-end; white-space: nowrap; }
+  .meta-value-nowrap { white-space: nowrap; display: inline-block; }
+  .meta-section > .meta-col:nth-child(2) { justify-self: center; min-width: 420px; }
+  .run-col { text-align: right; display: flex; flex-direction: column; gap: 1.5px; align-items: flex-end; white-space: nowrap; min-width: 0; justify-self: end; }
   .clickable { cursor: pointer; border-radius: 2px; transition: background 0.12s, outline 0.12s; padding: 0 2px; }
   .clickable:hover { background: #fff3cd; outline: 1px solid #e6a817; }
   .clickable.active { background: #d0e8ff; outline: 1px solid #0056b3; }
@@ -71,6 +73,7 @@
   .explain-section { margin-bottom: 9px; }
   .tip-badge { display: inline-block; background: #003087; color: #fff; font-size: 8.5px; font-weight: bold; padding: 1px 5px; border-radius: 2px; margin-bottom: 3px; letter-spacing: 0.3px; }
   .tip-badge.acct-badge { background: #1a5c1a; }
+  .tip-badge.nav-badge { background: #6b2d8b; }
   .explain-section-body { font-size: 11px; color: #222; line-height: 1.6; }
   .nat-acct-list { margin-top: 6px; font-size: 10px; color: #333; border-top: 1px solid #dde; padding-top: 6px; }
   .nat-acct-list .na-row { display: flex; gap: 6px; padding: 2px 0; border-bottom: 1px dotted #e0e0e0; }
@@ -83,19 +86,154 @@
   .tab-counter.visible { display: block; }
   @keyframes hint-pulse { 0% { box-shadow: 0 0 0 0 rgba(0,48,135,0.5); } 70% { box-shadow: 0 0 0 6px rgba(0,48,135,0); } 100% { box-shadow: 0 0 0 0 rgba(0,48,135,0); } }
   .first-hint { animation: hint-pulse 1.4s ease 0.9s 2; border-radius: 2px; }
+
+  .pill-bar {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 4px 0 3px;
+    white-space: nowrap;
+  }
+  .pill-label {
+    font-size: 8.5px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #888;
+    margin-right: 1px;
+  }
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 12px 3px 9px;
+    border-radius: 999px;
+    border: 1px solid #a9a9a9;
+    background: #f7f7f7;
+    font-size: 9.5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.12s ease, border-color 0.12s ease, box-shadow 0.12s ease;
+    user-select: none;
+    color: #333;
+    letter-spacing: 0.01em;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.85);
+  }
+  .pill-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .pill:hover { border-color: #666; color: #111; }
+  .question-selector {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    padding: 0 0;
+    border-top: 0;
+    border-bottom: 0;
+    background: #efefef;
+    transition: max-height 0.22s ease, opacity 0.16s ease, padding 0.16s ease, border-width 0.16s ease;
+  }
+  .question-selector.visible {
+    max-height: 46px;
+    opacity: 1;
+    padding: 6px 0 6px;
+    border-top: 1px solid #bdbdbd;
+    border-bottom: 1px solid #d2d2d2;
+  }
+  .question-selector-inner {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 12px;
+  }
+  .question-selector-label {
+    font-size: 8.5px;
+    font-weight: bold;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #9a8f7a;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .pill-row {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    flex-wrap: nowrap;
+  }
+  .pill.pill-focus {
+    outline: 1px solid #7f7f7f;
+    outline-offset: 0;
+    box-shadow: 0 0 0 2px rgba(140,140,140,0.12);
+  }
+
+  .pill[data-pill="budget"] .pill-dot { background: #4d8ea5; }
+  .pill[data-pill="budget"].pill-on   { background: #f7f7f7; border-color: #7f7f7f; color: #222; }
+
+  .pill[data-pill="spent"] .pill-dot  { background: #d38a2c; }
+  .pill[data-pill="spent"].pill-on    { background: #f7f7f7; border-color: #7f7f7f; color: #222; }
+
+  .pill[data-pill="left"] .pill-dot   { background: #5a9a45; }
+  .pill[data-pill="left"].pill-on     { background: #f7f7f7; border-color: #7f7f7f; color: #222; }
+
+  @keyframes hlShimmer { 0%{background-position:-200% center,0 0} 100%{background-position:300% center,0 0} }
+  @keyframes hlBeat    { 0%,100%{filter:brightness(1)} 45%{filter:brightness(1.28)} }
+  @keyframes hlIn      { from{opacity:0;transform:translateX(4px)} to{opacity:1;transform:translateX(0)} }
+  @keyframes glowBreathe { 0%,100%{opacity:.45} 50%{opacity:1} }
+
+  th.hl-hdr {
+    position:relative !important; overflow:hidden !important;
+    background-image:
+      linear-gradient(105deg,rgba(255,255,255,0) 20%,rgba(255,255,255,.55) 50%,rgba(255,255,255,0) 80%),
+      linear-gradient(var(--hl-fill),var(--hl-fill)) !important;
+    background-size:200% 100%,100% 100% !important;
+    background-position:-200% center,0 0 !important;
+    animation:hlShimmer 2.6s ease-in-out infinite !important;
+    border-left:1.5px solid var(--hl-line) !important;
+    border-right:1.5px solid var(--hl-line) !important;
+    border-top:2px solid var(--hl-line) !important;
+    border-bottom:3px solid var(--hl-strong) !important;
+    color:var(--hl-text) !important;
+  }
+  td.hl-cell {
+    background:var(--hl-cell) !important;
+    border-left:1px solid var(--hl-soft) !important;
+    border-right:1px solid var(--hl-soft) !important;
+    color:var(--hl-text) !important;
+    font-weight:700 !important;
+    animation:hlBeat 2.8s ease-in-out infinite,hlIn .35s ease both !important;
+  }
+  td.hl-cell.neg, td.hl-cell.rneg { color:#cc0000 !important; background:rgba(200,55,58,.07) !important; }
+
+  .hl-glow-strip {
+    position:absolute; pointer-events:none; z-index:3; top:0;
+    background:radial-gradient(ellipse 90% 55% at 50% 50%,
+      var(--hl-radial-center) 0%, var(--hl-radial-mid) 55%, transparent 100%);
+    animation:glowBreathe 2.8s ease-in-out infinite;
+  }
+  .hl-glow-strip::before,.hl-glow-strip::after {
+    content:''; position:absolute; top:0; bottom:0; width:2px;
+    background:linear-gradient(180deg,transparent 0%,var(--hl-edge) 8%,var(--hl-edge) 92%,transparent 100%);
+    animation:glowBreathe 2.8s ease-in-out infinite;
+  }
+  .hl-glow-strip::before { left:0; }
+  .hl-glow-strip::after  { right:0; }
+
+  .table-wrapper { position:relative; }
 </style>
 </head>
 <body>
 <div id="report-panel">
   <div id="report-static">
     <div class="nav-bar">
-      <a href="#">&lt; Previous Accounting Period</a>
-      <a href="#">[Trial Balance by CF]</a>
-      <a href="#">[All Commitments]</a>
-      <div class="nav-fds-wrap"><a href="#">[SAPOs Only]</a><span class="fds-sub">Financial Data Store</span></div>
-      <a href="#">[Payroll Summary]</a>
-      <a href="#">[Payroll Detail]</a>
-      <a href="#">Next Accounting Period &gt;</a>
+      <span class="nav-link clickable" tabindex="0" data-key="nav_prev_period">&lt; Previous Accounting Period</span>
+      <span class="nav-link clickable" tabindex="0" data-key="nav_trial_balance">[Trial Balance by CF]</span>
+      <span class="nav-link clickable" tabindex="0" data-key="nav_all_commitments">[All Commitments]</span>
+      <div class="nav-fds-wrap">
+        <span class="nav-link clickable" tabindex="0" data-key="nav_sapos_only">[SAPOs Only]</span>
+        <span class="fds-sub">Financial Data Store</span>
+      </div>
+      <span class="nav-link clickable" tabindex="0" data-key="nav_payroll_summary">[Payroll Summary]</span>
+      <span class="nav-link clickable" tabindex="0" data-key="nav_payroll_detail">[Payroll Detail]</span>
+      <span class="nav-link clickable" tabindex="0" data-key="nav_next_period">Next Accounting Period &gt;</span>
     </div>
     <div class="header-block">
       <div class="logo-area">
@@ -114,11 +252,11 @@
         <div class="meta-row"><span class="meta-label">Run ID:</span><span>&nbsp;mwt2112</span></div>
         <div class="meta-row"><span class="meta-label clickable" tabindex="0" data-key="project_description">Project Description:</span></div>
         <div class="meta-row"><span class="meta-label clickable" tabindex="0" data-key="project_manager">Project Manager:</span></div>
-        <div class="meta-row"><span class="meta-label clickable" tabindex="0" data-key="project_owning_dept">Project Owning Dept:</span></div>
-        <div class="meta-row"><span class="meta-label clickable" tabindex="0" data-key="project_title">Project Title:</span></div>
+        <div class="meta-row"><span class="meta-label clickable" tabindex="0" data-key="project_owning_dept">Project Owning Dept:</span><span class="meta-value-nowrap">&nbsp;5201234 - ENG Training</span></div>
+        <div class="meta-row"><span class="meta-label clickable" tabindex="0" data-key="project_title">Project Title:</span><span class="meta-value-nowrap">&nbsp;Cosmic Cognition: Astrophysical Perception and Psychoanalytic Patterning</span></div>
       </div>
       <div class="meta-col">
-        <div class="meta-row"><span class="meta-label clickable" tabindex="0" data-key="project_id">Project ID:</span><span>&nbsp;UR012345 - ENG Training</span></div>
+        <div class="meta-row"><span class="meta-label clickable" tabindex="0" data-key="project_id">Project ID:</span><span>&nbsp;GG012345 - ENG Training</span></div>
         <div class="meta-row"><span class="meta-label clickable" tabindex="0" data-key="activity_managers">Activity Manager(s):</span></div>
         <div class="meta-row"><span class="meta-label">Sponsor:</span><span class="clickable" tabindex="0" data-key="sponsor">&nbsp;0000000010 - National Science Foundation</span></div>
         <div class="meta-row"><span class="meta-label">Activity Type:</span><span class="clickable" tabindex="0" data-key="activity_type">&nbsp;BPALL</span></div>
@@ -128,19 +266,48 @@
         <div class="meta-row"><span class="meta-label">Run Date:</span><span>&nbsp;4/3/2026</span></div>
         <div class="meta-row"><span class="meta-label">Run Time:</span><span>&nbsp;12:40:41PM</span></div>
         <div style="height:2px"></div>
-        <div class="meta-row"><span class="meta-label">Project Period:</span><span class="clickable" tabindex="0" data-key="project_period">&nbsp;09/01/2021 - 08/31/2027</span></div>
-        <div class="meta-row"><span class="meta-label">Activity Period:</span><span class="clickable" tabindex="0" data-key="activity_period">&nbsp;09/01/2025 - 08/31/2026</span></div>
-        <div class="meta-row"><span class="meta-label">Award Period:</span><span class="clickable" tabindex="0" data-key="award_period">&nbsp;09/01/2021 - 08/31/2027</span></div>
+        <div class="meta-row"><span class="meta-label">Project Period:</span><span class="clickable" tabindex="0" data-key="project_period">&nbsp;09/01/2021 - 08/31/2026</span></div>
+        <div class="meta-row"><span class="meta-label">Activity Period:</span><span class="clickable" tabindex="0" data-key="activity_period">&nbsp;09/01/2021 - 08/31/2026</span></div>
+        <div class="meta-row"><span class="meta-label">Award Period:</span><span class="clickable" tabindex="0" data-key="award_period">&nbsp;09/01/2021 - 08/31/2028</span></div>
       </div>
     </div>
+
+    <div id="question-selector" class="question-selector" aria-hidden="true">
+      <div class="question-selector-inner">
+        <div class="question-selector-label">Jump to:</div>
+        <div class="pill-row">
+          <div class="pill" data-pill="budget" onclick="togglePill(this)"><span class="pill-dot"></span> What's my budget</div>
+          <div class="pill" data-pill="spent" onclick="togglePill(this)"><span class="pill-dot"></span> Spending to date</div>
+          <div class="pill" data-pill="left" onclick="togglePill(this)"><span class="pill-dot"></span> How much is left</div>
+        </div>
+      </div>
+    </div>
+
   </div>
+
   <div id="table-scroll-area">
   <div class="table-wrapper">
-  <table class="report-table">
-    <colgroup><col class="c-acct"><col class="c-desc"><col class="c-budget"><col class="c-mth"><col class="c-fytd"><col class="c-ptd"><col class="c-bbc"><col class="c-enc"><col class="c-pre"><col class="c-accrual"><col class="c-tac"><col class="c-bba"><col class="c-pct"><col class="c-burn"></colgroup>
+  <table class="report-table" id="main-table">
+    <colgroup>
+      <col class="c-acct">
+      <col class="c-desc">
+      <col class="c-budget">
+      <col class="c-mth">
+      <col class="c-fytd">
+      <col class="c-ptd">
+      <col class="c-bbc">
+      <col class="c-enc">
+      <col class="c-pre">
+      <col class="c-accrual">
+      <col class="c-tac">
+      <col class="c-bba">
+      <col class="c-pct">
+      <col class="c-burn">
+    </colgroup>
     <thead id="report-thead">
       <tr class="hdr-group">
-        <th colspan="2"></th><th></th>
+        <th colspan="2"></th>
+        <th></th>
         <th colspan="4" class="hdr-actual-group clickable" tabindex="0" data-key="actual_to_date_group">Actual to Date (Does not include Accruals)</th>
         <th colspan="3" class="hdr-commit-group clickable" tabindex="0" data-key="commitment_group">Commitment</th>
         <th></th><th></th><th></th><th></th>
@@ -148,45 +315,45 @@
       <tr class="hdr-cols">
         <th class="left">Account</th>
         <th class="left">Account Description</th>
-        <th class="right clickable first-hint" tabindex="0" data-key="project_budget">Project Budget</th>
-        <th class="right clickable" tabindex="0" data-key="month_actuals">Month Actuals</th>
-        <th class="right clickable" tabindex="0" data-key="fiscal_year_to_date">Fiscal Year to Date</th>
-        <th class="right clickable" tabindex="0" data-key="project_to_date">Project to Date</th>
+        <th class="right clickable first-hint col-budget" tabindex="0" data-key="project_budget">Project Budget</th>
+        <th class="right clickable col-spent" tabindex="0" data-key="month_actuals">Month Actuals</th>
+        <th class="right clickable col-spent" tabindex="0" data-key="fiscal_year_to_date">Fiscal Year to Date</th>
+        <th class="right clickable col-spent" tabindex="0" data-key="project_to_date">Project to Date</th>
         <th class="right clickable" tabindex="0" data-key="balance_before_commitment">Balance Before Commitment</th>
         <th class="right clickable" tabindex="0" data-key="encumbrance">Encumbrance</th>
         <th class="right clickable" tabindex="0" data-key="pre_encumbrance">Pre-Encumbrance</th>
         <th class="right clickable" tabindex="0" data-key="accruals_open_vouchers">Accruals or Open Vouchers</th>
         <th class="right clickable" tabindex="0" data-key="total_actuals_commitments">Total Actuals and Commitments</th>
-        <th class="right clickable" tabindex="0" data-key="budget_balance_available">Budget Balance Available</th>
+        <th class="right clickable col-left" tabindex="0" data-key="budget_balance_available">Budget Balance Available</th>
         <th class="right clickable" tabindex="0" data-key="pct_used">% Used</th>
         <th class="right clickable" tabindex="0" data-key="burn_rate">Burn Rate %</th>
       </tr>
     </thead>
     <tbody>
-<tr><td>50000</td><td class="acct-desc-clickable" data-acct="50000">SALARY AND WAGES</td><td class="r">5,840,000.00</td><td class="blue">182,440.15</td><td class="blue">1,384,210.44</td><td class="blue">4,372,610.22</td><td class="r">1,467,389.78</td><td class="blue">312,840.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="r">4,685,450.22</td><td class="r">1,154,549.78</td><td class="r">80%</td><td class="r">84%</td></tr>
-<tr><td>59000</td><td class="acct-desc-clickable" data-acct="59000">FRINGE BENEFIT CHARGE</td><td class="r">1,460,000.00</td><td class="blue">46,910.33</td><td class="blue">347,830.18</td><td class="blue">1,093,152.44</td><td class="r">366,847.56</td><td class="blue">78,210.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="r">1,171,362.44</td><td class="r">288,637.56</td><td class="r">80%</td><td class="r">85%</td></tr>
-<tr><td>61000</td><td class="acct-desc-clickable" data-acct="61000">FINANCIAL AID</td><td class="r">12,000.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="r">12,000.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="r">0.00</td><td class="r">12,000.00</td><td class="r">0%</td><td class="r">0%</td></tr>
-<tr><td>61100</td><td class="acct-desc-clickable" data-acct="61100">NONTUITION FINANCIAL AID</td><td class="r">52,000.00</td><td class="blue">0.00</td><td class="blue">26,000.00</td><td class="blue">39,200.00</td><td class="r">12,800.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="r">39,200.00</td><td class="r">12,800.00</td><td class="r">75%</td><td class="r">75%</td></tr>
-<tr><td>61151</td><td class="acct-desc-clickable" data-acct="61151">GRA TUITION</td><td class="r">510,000.00</td><td class="blue">0.00</td><td class="blue">158,600.00</td><td class="blue">382,800.00</td><td class="r">127,200.00</td><td class="blue">76,500.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="r">459,300.00</td><td class="r">50,700.00</td><td class="r">90%</td><td class="r">95%</td></tr>
-<tr><td>61400</td><td class="acct-desc-clickable" data-acct="61400">SUPPLIES AND MATERIALS</td><td class="r">118,000.00</td><td class="blue">3,240.18</td><td class="blue">12,450.72</td><td class="blue">88,630.44</td><td class="r">29,369.56</td><td class="blue">0.00</td><td class="blue">4,200.00</td><td class="blue">0.00</td><td class="r">92,830.44</td><td class="r">25,169.56</td><td class="r">79%</td><td class="r">78%</td></tr>
-<tr><td>61900</td><td class="acct-desc-clickable" data-acct="61900">MINOR EQUIPMENT</td><td class="r">0.00</td><td class="blue">2,650.00</td><td class="blue">2,650.00</td><td class="blue">2,650.00</td><td class="rneg">(2,650.00)</td><td class="blue">2,750.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="r">5,400.00</td><td class="rneg">(5,400.00)</td><td class="r">N/A</td><td class="r">N/A</td></tr>
-<tr><td>62000</td><td class="acct-desc-clickable" data-acct="62000">PUBLICATIONS</td><td class="r">16,200.00</td><td class="blue">168.50</td><td class="blue">1,840.00</td><td class="blue">8,125.00</td><td class="r">8,075.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="r">8,125.00</td><td class="r">8,075.00</td><td class="r">50%</td><td class="r">52%</td></tr>
-<tr><td>63000</td><td class="acct-desc-clickable" data-acct="63000">RENTALS</td><td class="r">0.00</td><td class="blue">1,440.00</td><td class="blue">10,080.00</td><td class="blue">9,840.00</td><td class="rneg">(9,840.00)</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="blue">13,500.00</td><td class="r">23,340.00</td><td class="rneg">(23,340.00)</td><td class="r">N/A</td><td class="r">N/A</td></tr>
-<tr><td>63200</td><td class="acct-desc-clickable" data-acct="63200">COMPUTER SERVICES</td><td class="r">88,000.00</td><td class="blue">0.00</td><td class="blue">19,400.00</td><td class="blue">51,200.00</td><td class="r">36,800.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="r">51,200.00</td><td class="r">36,800.00</td><td class="r">58%</td><td class="r">55%</td></tr>
-<tr><td>63400</td><td class="acct-desc-clickable" data-acct="63400">COMMUNICATIONS</td><td class="r">0.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="blue">12.50</td><td class="rneg">(12.50)</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="r">12.50</td><td class="rneg">(12.50)</td><td class="r">N/A</td><td class="r">N/A</td></tr>
-<tr><td>64000</td><td class="acct-desc-clickable" data-acct="64000">SERVICES</td><td class="r">652,000.00</td><td class="blue">2,600.35</td><td class="blue">35,120.00</td><td class="blue">326,480.00</td><td class="r">325,520.00</td><td class="blue">0.00</td><td class="blue neg">(8,940.50)</td><td class="blue">0.00</td><td class="r">317,539.50</td><td class="r">334,460.50</td><td class="r">49%</td><td class="r">50%</td></tr>
-<tr><td>64500</td><td class="acct-desc-clickable" data-acct="64500">CONSULTANTS</td><td class="r">245,000.00</td><td class="blue">0.00</td><td class="blue">490,000.00</td><td class="blue">490,000.00</td><td class="rneg">(245,000.00)</td><td class="blue">490,000.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="r">980,000.00</td><td class="rneg">(735,000.00)</td><td class="r">N/A</td><td class="r">N/A</td></tr>
-<tr><td>65000</td><td class="acct-desc-clickable" data-acct="65000">SUBCONTRACTS</td><td class="r">5,480,000.00</td><td class="blue">825,600.44</td><td class="blue">1,318,440.22</td><td class="blue">3,448,720.18</td><td class="r">2,031,279.82</td><td class="blue">1,980,310.00</td><td class="blue">0.00</td><td class="blue">56,820.00</td><td class="r">5,485,850.18</td><td class="rneg">(5,850.18)</td><td class="r">100%</td><td class="r">105%</td></tr>
-<tr><td>65200</td><td class="acct-desc-clickable" data-acct="65200">DOMESTIC TRAVEL</td><td class="r">248,000.00</td><td class="blue">2,960.14</td><td class="blue">51,440.00</td><td class="blue">88,140.00</td><td class="r">159,860.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="r">88,140.00</td><td class="r">159,860.00</td><td class="r">36%</td><td class="r">38%</td></tr>
-<tr><td>65300</td><td class="acct-desc-clickable" data-acct="65300">INTERNATIONAL TRAVEL</td><td class="r">0.00</td><td class="blue">0.00</td><td class="blue">6,920.00</td><td class="blue">6,920.00</td><td class="rneg">(6,920.00)</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="r">6,920.00</td><td class="rneg">(6,920.00)</td><td class="r">N/A</td><td class="r">N/A</td></tr>
-<tr><td>65600</td><td class="acct-desc-clickable" data-acct="65600">ANIMAL CARE</td><td class="r">0.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="blue">740.00</td><td class="rneg">(740.00)</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="r">740.00</td><td class="rneg">(740.00)</td><td class="r">N/A</td><td class="r">N/A</td></tr>
-<tr><td>66000</td><td class="acct-desc-clickable" data-acct="66000">OTHER EXPENSES</td><td class="r">0.00</td><td class="blue">470.22</td><td class="blue">29,460.00</td><td class="blue">30,810.44</td><td class="rneg">(30,810.44)</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="r">30,810.44</td><td class="rneg">(30,810.44)</td><td class="r">N/A</td><td class="r">N/A</td></tr>
-<tr class="total-row clickable" tabindex="0" data-key="total_direct_expense"><td colspan="2">Total Direct Expense</td><td class="r">15,721,200.00</td><td class="r">1,070,629.31</td><td class="r">3,893,031.56</td><td class="r">10,440,630.22</td><td class="r">5,280,569.78</td><td class="r">2,860,610.00</td><td class="r">(4,740.50)</td><td class="r">70,320.00</td><td class="r">13,366,819.72</td><td class="r">2,354,380.28</td><td class="r">85%</td><td class="r">89%</td></tr>
+<tr><td>50000</td><td class="acct-desc-clickable" data-acct="50000" tabindex="0">SALARY AND WAGES</td><td class="r col-budget">5,840,000.00</td><td class="blue col-spent">182,440.15</td><td class="blue col-spent">1,384,210.44</td><td class="blue col-spent">4,372,610.22</td><td class="r">1,467,389.78</td><td class="blue">312,840.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="r">4,685,450.22</td><td class="r col-left">1,154,549.78</td><td class="r">80%</td><td class="r">84%</td></tr>
+<tr><td>59000</td><td class="acct-desc-clickable" data-acct="59000" tabindex="0">FRINGE BENEFIT CHARGE</td><td class="r col-budget">1,460,000.00</td><td class="blue col-spent">46,910.33</td><td class="blue col-spent">347,830.18</td><td class="blue col-spent">1,093,152.44</td><td class="r">366,847.56</td><td class="blue">78,210.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="r">1,171,362.44</td><td class="r col-left">288,637.56</td><td class="r">80%</td><td class="r">85%</td></tr>
+<tr><td>61000</td><td class="acct-desc-clickable" data-acct="61000" tabindex="0">FINANCIAL AID</td><td class="r col-budget">12,000.00</td><td class="blue col-spent">0.00</td><td class="blue col-spent">0.00</td><td class="blue col-spent">0.00</td><td class="r">12,000.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="r">0.00</td><td class="r col-left">12,000.00</td><td class="r">0%</td><td class="r">0%</td></tr>
+<tr><td>61100</td><td class="acct-desc-clickable" data-acct="61100" tabindex="0">NONTUITION FINANCIAL AID</td><td class="r col-budget">52,000.00</td><td class="blue col-spent">0.00</td><td class="blue col-spent">26,000.00</td><td class="blue col-spent">39,200.00</td><td class="r">12,800.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="r">39,200.00</td><td class="r col-left">12,800.00</td><td class="r">75%</td><td class="r">75%</td></tr>
+<tr><td>61151</td><td class="acct-desc-clickable" data-acct="61151" tabindex="0">GRA TUITION</td><td class="r col-budget">510,000.00</td><td class="blue col-spent">0.00</td><td class="blue col-spent">158,600.00</td><td class="blue col-spent">382,800.00</td><td class="r">127,200.00</td><td class="blue">76,500.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="r">459,300.00</td><td class="r col-left">50,700.00</td><td class="r">90%</td><td class="r">95%</td></tr>
+<tr><td>61400</td><td class="acct-desc-clickable" data-acct="61400" tabindex="0">SUPPLIES AND MATERIALS</td><td class="r col-budget">118,000.00</td><td class="blue col-spent">3,240.18</td><td class="blue col-spent">12,450.72</td><td class="blue col-spent">88,630.44</td><td class="r">29,369.56</td><td class="blue">0.00</td><td class="blue">4,200.00</td><td class="blue">0.00</td><td class="r">92,830.44</td><td class="r col-left">25,169.56</td><td class="r">79%</td><td class="r">78%</td></tr>
+<tr><td>61900</td><td class="acct-desc-clickable" data-acct="61900" tabindex="0">MINOR EQUIPMENT</td><td class="r col-budget">0.00</td><td class="blue col-spent">2,650.00</td><td class="blue col-spent">2,650.00</td><td class="blue col-spent">2,650.00</td><td class="rneg">(2,650.00)</td><td class="blue">2,750.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="r">5,400.00</td><td class="rneg col-left">(5,400.00)</td><td class="r">N/A</td><td class="r">N/A</td></tr>
+<tr><td>62000</td><td class="acct-desc-clickable" data-acct="62000" tabindex="0">PUBLICATIONS</td><td class="r col-budget">16,200.00</td><td class="blue col-spent">168.50</td><td class="blue col-spent">1,840.00</td><td class="blue col-spent">8,125.00</td><td class="r">8,075.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="r">8,125.00</td><td class="r col-left">8,075.00</td><td class="r">50%</td><td class="r">52%</td></tr>
+<tr><td>63000</td><td class="acct-desc-clickable" data-acct="63000" tabindex="0">RENTALS</td><td class="r col-budget">0.00</td><td class="blue col-spent">1,440.00</td><td class="blue col-spent">10,080.00</td><td class="blue col-spent">9,840.00</td><td class="rneg">(9,840.00)</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="blue">13,500.00</td><td class="r">23,340.00</td><td class="rneg col-left">(23,340.00)</td><td class="r">N/A</td><td class="r">N/A</td></tr>
+<tr><td>63200</td><td class="acct-desc-clickable" data-acct="63200" tabindex="0">COMPUTER SERVICES</td><td class="r col-budget">88,000.00</td><td class="blue col-spent">0.00</td><td class="blue col-spent">19,400.00</td><td class="blue col-spent">51,200.00</td><td class="r">36,800.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="r">51,200.00</td><td class="r col-left">36,800.00</td><td class="r">58%</td><td class="r">55%</td></tr>
+<tr><td>63400</td><td class="acct-desc-clickable" data-acct="63400" tabindex="0">COMMUNICATIONS</td><td class="r col-budget">0.00</td><td class="blue col-spent">0.00</td><td class="blue col-spent">0.00</td><td class="blue col-spent">12.50</td><td class="rneg">(12.50)</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="r">12.50</td><td class="rneg col-left">(12.50)</td><td class="r">N/A</td><td class="r">N/A</td></tr>
+<tr><td>64000</td><td class="acct-desc-clickable" data-acct="64000" tabindex="0">SERVICES</td><td class="r col-budget">652,000.00</td><td class="blue col-spent">2,600.35</td><td class="blue col-spent">35,120.00</td><td class="blue col-spent">326,480.00</td><td class="r">325,520.00</td><td class="blue">0.00</td><td class="blue neg">(8,940.50)</td><td class="blue">0.00</td><td class="r">317,539.50</td><td class="r col-left">334,460.50</td><td class="r">49%</td><td class="r">50%</td></tr>
+<tr><td>64500</td><td class="acct-desc-clickable" data-acct="64500" tabindex="0">CONSULTANTS</td><td class="r col-budget">245,000.00</td><td class="blue col-spent">0.00</td><td class="blue col-spent">490,000.00</td><td class="blue col-spent">490,000.00</td><td class="rneg">(245,000.00)</td><td class="blue">490,000.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="r">980,000.00</td><td class="rneg col-left">(735,000.00)</td><td class="r">N/A</td><td class="r">N/A</td></tr>
+<tr><td>65000</td><td class="acct-desc-clickable" data-acct="65000" tabindex="0">SUBCONTRACTS</td><td class="r col-budget">5,480,000.00</td><td class="blue col-spent">825,600.44</td><td class="blue col-spent">1,318,440.22</td><td class="blue col-spent">3,448,720.18</td><td class="r">2,031,279.82</td><td class="blue">1,980,310.00</td><td class="blue">0.00</td><td class="blue">56,820.00</td><td class="r">5,485,850.18</td><td class="rneg col-left">(5,850.18)</td><td class="r">100%</td><td class="r">105%</td></tr>
+<tr><td>65200</td><td class="acct-desc-clickable" data-acct="65200" tabindex="0">DOMESTIC TRAVEL</td><td class="r col-budget">248,000.00</td><td class="blue col-spent">2,960.14</td><td class="blue col-spent">51,440.00</td><td class="blue col-spent">88,140.00</td><td class="r">159,860.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="r">88,140.00</td><td class="r col-left">159,860.00</td><td class="r">36%</td><td class="r">38%</td></tr>
+<tr><td>65300</td><td class="acct-desc-clickable" data-acct="65300" tabindex="0">INTERNATIONAL TRAVEL</td><td class="r col-budget">0.00</td><td class="blue col-spent">0.00</td><td class="blue col-spent">6,920.00</td><td class="blue col-spent">6,920.00</td><td class="rneg">(6,920.00)</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="r">6,920.00</td><td class="rneg col-left">(6,920.00)</td><td class="r">N/A</td><td class="r">N/A</td></tr>
+<tr><td>65600</td><td class="acct-desc-clickable" data-acct="65600" tabindex="0">ANIMAL CARE</td><td class="r col-budget">0.00</td><td class="blue col-spent">0.00</td><td class="blue col-spent">0.00</td><td class="blue col-spent">740.00</td><td class="rneg">(740.00)</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="r">740.00</td><td class="rneg col-left">(740.00)</td><td class="r">N/A</td><td class="r">N/A</td></tr>
+<tr><td>66000</td><td class="acct-desc-clickable" data-acct="66000" tabindex="0">OTHER EXPENSES</td><td class="r col-budget">0.00</td><td class="blue col-spent">470.22</td><td class="blue col-spent">29,460.00</td><td class="blue col-spent">30,810.44</td><td class="rneg">(30,810.44)</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="r">30,810.44</td><td class="rneg col-left">(30,810.44)</td><td class="r">N/A</td><td class="r">N/A</td></tr>
+<tr class="total-row clickable" tabindex="0" data-key="total_direct_expense"><td colspan="2">Total Direct Expense</td><td class="r col-budget">15,721,200.00</td><td class="r col-spent">1,070,629.31</td><td class="r col-spent">3,893,031.56</td><td class="r col-spent">10,440,630.22</td><td class="r">5,280,569.78</td><td class="r">2,860,610.00</td><td class="r">(4,740.50)</td><td class="r">70,320.00</td><td class="r">13,366,819.72</td><td class="r col-left">2,354,380.28</td><td class="r">85%</td><td class="r">89%</td></tr>
 <tr class="spacer"><td colspan="14"></td></tr>
-<tr><td>69800</td><td class="acct-desc-clickable" data-acct="69800">F&amp;A DEDUCTION</td><td class="r">4,278,800.00</td><td class="blue">299,776.21</td><td class="blue">1,089,848.84</td><td class="blue">2,923,376.46</td><td class="r">1,355,423.54</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="blue">1,882.00</td><td class="r">2,925,258.46</td><td class="r">1,353,541.54</td><td class="r">68%</td><td class="r">72%</td></tr>
-<tr class="total-row clickable" tabindex="0" data-key="total_fa_expense"><td colspan="2">Total F&amp;A Expense</td><td class="r">4,278,800.00</td><td class="r">299,776.21</td><td class="r">1,089,848.84</td><td class="r">2,923,376.46</td><td class="r">1,355,423.54</td><td class="r">0.00</td><td class="r">0.00</td><td class="r">1,882.00</td><td class="r">2,925,258.46</td><td class="r">1,353,541.54</td><td class="r">68%</td><td class="r">72%</td></tr>
+<tr><td>69800</td><td class="acct-desc-clickable" data-acct="69800" tabindex="0">F&amp;A DEDUCTION</td><td class="r col-budget">4,278,800.00</td><td class="blue col-spent">299,776.21</td><td class="blue col-spent">1,089,848.84</td><td class="blue col-spent">2,923,376.46</td><td class="r">1,355,423.54</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="blue">1,882.00</td><td class="r">2,925,258.46</td><td class="r col-left">1,353,541.54</td><td class="r">68%</td><td class="r">72%</td></tr>
+<tr class="total-row clickable" tabindex="0" data-key="total_fa_expense"><td colspan="2">Total F&amp;A Expense</td><td class="r col-budget">4,278,800.00</td><td class="r col-spent">299,776.21</td><td class="r col-spent">1,089,848.84</td><td class="r col-spent">2,923,376.46</td><td class="r">1,355,423.54</td><td class="r">0.00</td><td class="r">0.00</td><td class="r">1,882.00</td><td class="r">2,925,258.46</td><td class="r col-left">1,353,541.54</td><td class="r">68%</td><td class="r">72%</td></tr>
 <tr class="spacer"><td colspan="14"></td></tr>
-<tr class="total-row grand clickable" tabindex="0" data-key="total_expense"><td colspan="2">Total Expense</td><td class="r">20,000,000.00</td><td class="r">1,370,405.52</td><td class="r">4,982,880.40</td><td class="r">13,364,006.68</td><td class="r">6,635,993.32</td><td class="r">2,860,610.00</td><td class="r">(4,740.50)</td><td class="r">72,202.00</td><td class="r">16,292,078.18</td><td class="r">3,707,921.82</td><td class="r">81%</td><td class="r">86%</td></tr>
+<tr class="total-row grand clickable" tabindex="0" data-key="total_expense"><td colspan="2">Total Expense</td><td class="r col-budget">20,000,000.00</td><td class="r col-spent">1,370,405.52</td><td class="r col-spent">4,982,880.40</td><td class="r col-spent">13,364,006.68</td><td class="r">6,635,993.32</td><td class="r">2,860,610.00</td><td class="r">(4,740.50)</td><td class="r">72,202.00</td><td class="r">16,292,078.18</td><td class="r col-left">3,707,921.82</td><td class="r">81%</td><td class="r">86%</td></tr>
     </tbody>
   </table>
   </div>
@@ -201,158 +368,260 @@
 <div id="explain-panel">
   <div class="panel-header">
     <span>&#128216; Field Guide <span class="panel-tab-hint">Tab &#8633; to advance | click again to close</span></span>
-    <button onclick="closePanel()" title="Close (Esc)">&#x2715;</button>
+    <button id="panel-close" title="Close (Esc)">&#x2715;</button>
   </div>
   <div id="explain-inner"><div id="explain-content">
-    <p style="color:#555;font-size:11px;line-height:1.6;">Click any <strong style="color:#003087;">column header</strong> for field guidance, or click any <strong style="color:#1a5c1a;">account description</strong> for account definitions and natural account detail. Click the same item again to close.</p>
+    <p style="color:#555;font-size:11px;line-height:1.6;">Click any <strong style="color:#003087;">column header or field</strong>, <strong style="color:#6b2d8b;">nav bar link</strong>, or <strong style="color:#1a5c1a;">account description</strong> to see definitions and context. Press <kbd style="background:#eee;border:1px solid #ccc;border-radius:2px;padding:0 3px;font-size:10px;">Tab</kbd> to cycle through fields. Click the same item again to close.</p>
   </div></div>
 </div>
 <div class="training-badge">&#127891; Training Mode</div>
 <div class="tab-counter" id="tab-counter"></div>
 
 <script>
+var activePill = null;
+var pillNavActive = false;
+var pillOrder = ['budget','spent','left'];
+var pillFocusIndex = 0;
+var PILL_CFG = {
+  budget: { colClass: 'col-budget', text: '#0a5c6e', line: 'rgba(14,116,144,.38)', strong: 'rgba(14,116,144,.72)', soft: 'rgba(14,116,144,.18)', fill: 'rgba(14,116,144,.04)', cell: 'rgba(14,116,144,.025)', rCenter:'rgba(14,116,144,.04)', rMid: 'rgba(14,116,144,.015)', edge: 'rgba(14,116,144,.55)' },
+  spent:  { colClass: 'col-spent',  text: '#6b3800', line: 'rgba(180,100,0,.38)', strong: 'rgba(180,100,0,.72)', soft: 'rgba(180,100,0,.18)', fill: 'rgba(196,167,71,.05)', cell: 'rgba(196,167,71,.03)', rCenter:'rgba(196,167,71,.05)', rMid: 'rgba(196,167,71,.015)', edge: 'rgba(180,100,0,.55)' },
+  left:   { colClass: 'col-left',   text: '#1a5c1a', line: 'rgba(42,140,92,.38)', strong: 'rgba(42,140,92,.72)', soft: 'rgba(42,140,92,.18)', fill: 'rgba(42,140,92,.04)', cell: 'rgba(42,140,92,.025)', rCenter:'rgba(42,140,92,.04)', rMid: 'rgba(42,140,92,.015)', edge: 'rgba(42,140,92,.55)' }
+};
+var glowStrips = [];
+function getTableWrapper() { return document.querySelector('.table-wrapper'); }
+function clearHighlights() {
+  document.querySelectorAll('.hl-hdr').forEach(function(el) { el.classList.remove('hl-hdr'); el.style.cssText = ''; });
+  document.querySelectorAll('.hl-cell').forEach(function(el) { el.classList.remove('hl-cell'); el.style.cssText = ''; });
+  glowStrips.forEach(function(s) { s.parentNode && s.parentNode.removeChild(s); });
+  glowStrips = [];
+}
+function applyVars(el, cfg) {
+  el.style.setProperty('--hl-text', cfg.text);
+  el.style.setProperty('--hl-line', cfg.line);
+  el.style.setProperty('--hl-strong', cfg.strong);
+  el.style.setProperty('--hl-soft', cfg.soft);
+  el.style.setProperty('--hl-fill', cfg.fill);
+  el.style.setProperty('--hl-cell', cfg.cell);
+  el.style.setProperty('--hl-edge', cfg.edge);
+}
+function positionGlowStrips(colClass, cfg) {
+  var wrapper = getTableWrapper();
+  if (!wrapper) return;
+  var wRect = wrapper.getBoundingClientRect();
+  if (wRect.width === 0) { setTimeout(function(){ positionGlowStrips(colClass, cfg); }, 80); return; }
+  var headers = document.querySelectorAll('th.' + colClass);
+  headers.forEach(function(th) {
+    var hRect = th.getBoundingClientRect();
+    var strip = document.createElement('div');
+    strip.className = 'hl-glow-strip';
+    strip.style.setProperty('--hl-radial-center', cfg.rCenter);
+    strip.style.setProperty('--hl-radial-mid', cfg.rMid);
+    strip.style.setProperty('--hl-edge', cfg.edge);
+    strip.style.left = (hRect.left - wRect.left) + 'px';
+    strip.style.width = hRect.width + 'px';
+    strip.style.height = wrapper.scrollHeight + 'px';
+    strip.style.top = '0';
+    wrapper.appendChild(strip);
+    glowStrips.push(strip);
+  });
+}
+function applyHighlight(pill) {
+  var cfg = PILL_CFG[pill];
+  if (!cfg) return;
+  var colClass = cfg.colClass;
+  var table = document.getElementById('main-table');
+  table.querySelectorAll('th.' + colClass).forEach(function(th) { th.classList.add('hl-hdr'); applyVars(th, cfg); });
+  table.querySelectorAll('td.' + colClass).forEach(function(td) { td.classList.add('hl-cell'); applyVars(td, cfg); });
+  setTimeout(function() { positionGlowStrips(colClass, cfg); }, 60);
+}
+function getPillEl(pill) {
+  return document.querySelector('.pill[data-pill="' + pill + '"]');
+}
+function clearPillFocus() {
+  document.querySelectorAll('.pill').forEach(function(el) { el.classList.remove('pill-focus'); });
+}
+function setPillFocus(index) {
+  pillFocusIndex = (index + pillOrder.length) % pillOrder.length;
+  clearPillFocus();
+  var el = getPillEl(pillOrder[pillFocusIndex]);
+  if (el) el.classList.add('pill-focus');
+}
+function showQuestionSelector() {
+  var selector = document.getElementById('question-selector');
+  if (!selector) return;
+  selector.classList.add('visible');
+  selector.setAttribute('aria-hidden', 'false');
+}
+function hideQuestionSelector() {
+  var selector = document.getElementById('question-selector');
+  if (!selector) return;
+  selector.classList.remove('visible');
+  selector.setAttribute('aria-hidden', 'true');
+}
+function activatePillNav() {
+  pillNavActive = true;
+  showQuestionSelector();
+  pillFocusIndex = 0;
+  setPillFocus(pillFocusIndex);
+  var firstPill = getPillEl(pillOrder[pillFocusIndex]);
+  if (firstPill && activePill !== pillOrder[pillFocusIndex]) {
+    togglePill(firstPill);
+  }
+}
+function deactivatePillNav(clearActive) {
+  pillNavActive = false;
+  clearPillFocus();
+  if (clearActive && activePill) {
+    var activeEl = getPillEl(activePill);
+    if (activeEl) activeEl.classList.remove('pill-on');
+    clearHighlights();
+    activePill = null;
+  }
+  hideQuestionSelector();
+}
+function togglePill(el) {
+  var p = el.getAttribute('data-pill');
+  if (activePill === p) {
+    el.classList.remove('pill-on');
+    clearHighlights();
+    activePill = null;
+    if (pillNavActive) setPillFocus(pillOrder.indexOf(p));
+    return;
+  }
+  if (activePill) {
+    var prev = document.querySelector('.pill[data-pill="' + activePill + '"]');
+    if (prev) prev.classList.remove('pill-on');
+    clearHighlights();
+  }
+  el.classList.add('pill-on');
+  activePill = p;
+  applyHighlight(p);
+  if (pillNavActive) setPillFocus(pillOrder.indexOf(p));
+}
+var scrollArea = document.getElementById('table-scroll-area');
+if (scrollArea) {
+  scrollArea.addEventListener('scroll', function() {
+    if (activePill) {
+      glowStrips.forEach(function(s) { s.parentNode && s.parentNode.removeChild(s); });
+      glowStrips = [];
+      positionGlowStrips(PILL_CFG[activePill].colClass, PILL_CFG[activePill]);
+    }
+  });
+}
 var ACCT = {
   "50000":{"label":"SALARY AND WAGES","definition":"Salary and wages for all employee types including faculty, researchers, staff, and students charged to this sponsored project. Typically the largest expense category on a research grant.","interpret":"Confirm only project-eligible personnel are charged. Each salary charge should correspond to an effort certification or appointment. Unexpected charges may indicate misallocation.","why":"Salary is the most scrutinized cost on sponsored awards. Auditors focus on whether effort charged matches effort actually performed.","naturalAccounts":[{"code":"50010","desc":"PROF (TENURED)","def":"Salary paid to tenured professors."},{"code":"50020","desc":"ASSOC PROF (TENURED)","def":"Salary paid to tenured associate professors."},{"code":"50100","desc":"PROF (NONTENURED)","def":"Salary paid to non-tenured professors."},{"code":"50120","desc":"ASST PROF","def":"Salary paid to assistant professors."},{"code":"50130","desc":"INSTRUCTOR (FT)","def":"Salary paid to full-time instructors."},{"code":"50510","desc":"TEACHING ASSISTANT","def":"Salary paid to teaching assistants."},{"code":"50530","desc":"TEACHING FELLOW","def":"Salary paid to teaching fellows."},{"code":"50540","desc":"RESEARCH FELLOW","def":"Salary paid to research fellows."},{"code":"52010","desc":"SR RESEARCH SCIENTIST","def":"Salary paid to senior research scientists."},{"code":"52030","desc":"RESEARCH SCIENTIST","def":"Salary paid to research scientists."},{"code":"52200","desc":"POSTDOC RESEARCH FELLOW (FT)","def":"Salary paid to full-time postdoctoral research fellows."},{"code":"52210","desc":"POSTDOC RESEARCH SCHOLAR (FT)","def":"Salary paid to full-time postdoctoral research scholars."},{"code":"52810","desc":"GRA (SUBJECT TO TUITION)","def":"Salary paid to graduate research assistants with tuition charged."},{"code":"52820","desc":"GRA (NO TUITION)","def":"Salary paid to graduate research assistants without tuition charged."},{"code":"53300","desc":"OFFICER OF ADMINISTRATION","def":"Salary paid to officers of administration."},{"code":"53330","desc":"MANAGER/DEPT ADMINISTRATOR","def":"Salary paid to managers or department administrators."},{"code":"53350","desc":"ADMINISTRATIVE PROFESSIONAL","def":"Salary paid to administrative professionals."},{"code":"53600","desc":"HOURLY PERSONNEL","def":"Wages paid to hourly employees."},{"code":"54400","desc":"STUDENTS - WORK STUDY","def":"Student wages funded by work-study programs."},{"code":"54420","desc":"STUDENTS-CASUAL (PT)","def":"Wages paid to part-time casual student workers."},{"code":"54600","desc":"UNION SUPPORT STAFF","def":"Salary paid to union support staff."},{"code":"54800","desc":"NONUNION-SUPPORT STAFF","def":"Salary paid to non-union support staff."},{"code":"54070","desc":"VACATION PAY","def":"Vacation pay expense or accrual."}]},
   "59000":{"label":"FRINGE BENEFIT CHARGE","definition":"Fringe benefit costs (health, retirement, FICA, disability, etc.) automatically calculated as a percentage of salary and charged alongside salary expenses.","interpret":"Fringe charges are system-generated based on employee type and salary. If salary is corrected, fringe follows. Review fringe rates by employee class if the total looks disproportionate.","why":"Fringe is a significant cost and subject to the same allowability rules as salary. Federal sponsors require approved, consistently applied rates.","naturalAccounts":[{"code":"59010","desc":"FRINGE BENEFIT CHARGE","def":"Fringe benefit costs charged to salary expenses."},{"code":"59020","desc":"FRINGE ADDITIONAL","def":"Additional fringe benefit charges."},{"code":"59025","desc":"FRINGE SPECIAL ADJUSTMENT","def":"Special adjustment to fringe benefits."},{"code":"59026","desc":"FRINGE RETURN OF SAVINGS","def":"Return of fringe savings or credit."},{"code":"59030","desc":"FRINGE STUDENTS","def":"Fringe benefit charges for student employees."},{"code":"59050","desc":"FRINGE A1 FICA","def":"Employer FICA fringe under A1 plan."},{"code":"60020","desc":"PREMIUMS","def":"Insurance premium payments."},{"code":"60060","desc":"GRADUATE HEALTH SUBSIDY","def":"Graduate health subsidy expense."},{"code":"60450","desc":"UNION BENEFITS","def":"Union benefit costs."},{"code":"60520","desc":"CHILDCARE BENEFIT","def":"Childcare benefit expense."}]},
   "61000":{"label":"FINANCIAL AID","definition":"Tuition, fees, room, and board awarded as financial aid to undergraduate or graduate students supported by this sponsored project.","interpret":"Charges here reflect direct student support costs. If budget is zero and charges appear, a budget modification may be needed. Verify student affiliation with the project.","why":"Student support costs are allowable on many federal awards but require specific justification. NIH training grants have strict trainee cost rules.","naturalAccounts":[{"code":"61010","desc":"UNDERGRAD TUIT,FEES,ROOM,BOARD","def":"Undergraduate tuition, fees, room, and board charged as financial aid."},{"code":"61030","desc":"GRADUATE TUITION AND FEES","def":"Graduate tuition and required academic fees charged as financial aid."},{"code":"61040","desc":"GRADUATE HEALTH FEES","def":"Graduate health fees charged as financial aid."},{"code":"61070","desc":"TRAINEE TUITION AND FEES","def":"Tuition and fees for trainees charged as financial aid."}]},
   "61100":{"label":"NONTUITION FINANCIAL AID","definition":"Non-tuition financial support including fellowships, stipends, scholarships, grants, prizes, and trainee costs paid to students or trainees on the project.","interpret":"Direct payments to students or trainees, not tuition. Verify each recipient is properly appointed and payment type matches award terms.","why":"Non-tuition aid has different tax treatment and sponsor rules than salary or tuition. Some awards distinguish stipends from compensation, affecting fringe and indirect cost applicability.","naturalAccounts":[{"code":"61110","desc":"UNDERGRADUATE GRANTS","def":"Undergraduate grants awarded as financial aid."},{"code":"61115","desc":"UNDERGRADUATE STIPENDS","def":"Undergraduate stipends awarded to students."},{"code":"61130","desc":"GRADUATE FELLOWSHIPS","def":"Graduate fellowships awarded to students."},{"code":"61140","desc":"GRADUATE STIPENDS","def":"Graduate stipends awarded to students."},{"code":"61170","desc":"TRAINEE COSTS","def":"Program costs associated with trainees."},{"code":"61172","desc":"TRAINEE STIPENDS","def":"Trainee stipends."},{"code":"61175","desc":"TRAINEE TRAVEL","def":"Travel costs for trainees."},{"code":"61200","desc":"STUDENT PRIZES / AWARDS","def":"Student prizes or awards."},{"code":"61220","desc":"POST GRAD FELLOWSHIPS","def":"Post-graduate fellowships."},{"code":"61230","desc":"AID TO NONSTUDENTS","def":"Financial assistance paid to non-students."}]},
-  "61151":{"label":"GRA TUITION","definition":"Graduate research assistant tuition charged directly to the sponsored project. Triggered when a GRA is appointed and tuition is an allowable cost under the award terms.","interpret":"GRA tuition is one of the largest non-salary costs on research grants. Each charge should correspond to an active GRA appointment. The encumbrance column often shows future tuition commitments for the semester.","why":"Sponsors vary on GRA tuition policy. NSF and NIH generally allow it as a direct cost when a GRA appointment exists. Ensure tuition is budgeted for all anticipated GRA appointments.","naturalAccounts":[{"code":"61160","desc":"GRA TUITION - DIRECT CHARGE","def":"Graduate research assistant tuition charged directly to a grant."},{"code":"61165","desc":"GRA TUITION-RECOVERY-GOVT","def":"Recovery of GRA tuition from government sources."},{"code":"61166","desc":"GRA TUITION-RECOVERY-NONGOVT","def":"Recovery of GRA tuition from non-government sources."},{"code":"61167","desc":"GRA TUITION-TRANSFER","def":"Transfer entry for GRA tuition."}]},
-  "61400":{"label":"SUPPLIES AND MATERIALS","definition":"Expendable supplies and materials consumed in the project, including lab supplies, chemicals, reagents, office materials, food for participants, and other operational items.","interpret":"Supplies should be project-specific and directly used in the research. Watch for large purchases near project end -- these may raise allowability questions.","why":"Supplies must be allocable to the project. Under Uniform Guidance, costs must be necessary and reasonable. Stockpiling or purchasing for general departmental use is not allowable.","naturalAccounts":[{"code":"61405","desc":"SUPPLIES AND MATERIALS-GENERAL","def":"General supplies and materials."},{"code":"61410","desc":"OFFICE SUPPLIES-GENERAL","def":"Office supplies such as paper, pens, and folders."},{"code":"61500","desc":"LAB SUPPLIES-GENERAL","def":"General laboratory supplies."},{"code":"61505","desc":"LAB SUP-GLASSWARE","def":"Glassware used in laboratories."},{"code":"61525","desc":"LAB SUP-ELETR COMPONENTS","def":"Electronic components used in laboratories."},{"code":"61527","desc":"LAB SUP-REAGENTS","def":"Laboratory reagents."},{"code":"61550","desc":"LAB CHEMICALS-GENERAL","def":"General laboratory chemicals."},{"code":"61555","desc":"LAB CHEM- MEDIA/SERA","def":"Laboratory culture media or sera."},{"code":"61560","desc":"LAB CHEM- RADIOACTIVE","def":"Radioactive chemicals used in research."},{"code":"61565","desc":"LAB CHEM-GASES","def":"Laboratory gases."},{"code":"61600","desc":"MEDICAL SUPPLIES-GENERAL","def":"General medical supplies."},{"code":"61650","desc":"FOOD SUPPLIES-GENERAL","def":"General food supplies for participants or experiments."},{"code":"61692","desc":"FOOD-PARTICIPANTS","def":"Food purchased for research participants."}]},
-  "61900":{"label":"MINOR EQUIPMENT","definition":"Equipment purchases below the capitalization threshold -- not recorded as fixed assets. Includes computers, printers, cameras, minor furniture, and similar items.","interpret":"Charges against a zero budget signal unbudgeted equipment purchases. May be allowable if project-necessary, but a budget modification or sponsor prior approval may be required.","why":"Minor equipment must be used exclusively for project purposes and may require sponsor prior approval under the award terms.","naturalAccounts":[{"code":"61910","desc":"MINOR EQUIPMENT-GENERAL","def":"General minor equipment purchases not capitalized."},{"code":"61920","desc":"PRINTERS","def":"Purchase of printers."},{"code":"61921","desc":"SCANNERS","def":"Purchase of scanners."},{"code":"61922","desc":"CAMERAS","def":"Purchase of cameras."},{"code":"61925","desc":"MINOR EQUIPMENT-COMPUTERS","def":"Purchase of smaller computer equipment."},{"code":"61950","desc":"MINOR FURNITURE-GENERAL","def":"Purchase of minor furniture items."}]},
-  "62000":{"label":"PUBLICATIONS","definition":"Costs related to publishing or disseminating research results, including printing, reproduction, open-access journal fees (APCs), copyright licensing, and related publication expenses.","interpret":"Publication costs are generally allowable when they represent dissemination of sponsored research findings. Open-access fees are increasingly required by federal mandates.","why":"NIH and NSF now require open-access publication. APCs are allowable direct costs. Internal printing for project use may also be charged here.","naturalAccounts":[{"code":"62005","desc":"PUBLICATION COSTS-GENERAL","def":"General publication costs."},{"code":"62010","desc":"PUBLICATION COSTS-INTERNAL","def":"Internal publication costs."},{"code":"62020","desc":"PRINTING COSTS","def":"External printing costs."},{"code":"62025","desc":"REPRODUCTION COSTS","def":"Reproduction or copying costs."},{"code":"62030","desc":"COPYRIGHT USAGE","def":"Copyright licensing or usage fees."}]},
-  "63000":{"label":"RENTALS","definition":"Rental or lease payments for facilities, equipment, vehicles, office space, or other assets required for project activities.","interpret":"Charges against zero budget indicates space or equipment rented without prior budget planning. Review whether sponsor approval is needed for facility rentals.","why":"Rental costs must be allocable specifically to the project. Renting general-use space and charging entirely to a grant is not allowable unless the space is used exclusively for the project.","naturalAccounts":[{"code":"63005","desc":"RENTAL - GENERAL","def":"General rental expenses."},{"code":"63010","desc":"RENTAL - FACILITIES","def":"Rental of facilities or space."},{"code":"63025","desc":"RENTAL - OFFICE","def":"Office rental expense."},{"code":"63050","desc":"RENTAL - EQUIPMENT","def":"Equipment rental expense."},{"code":"63070","desc":"RENTAL - VEHICLE","def":"Vehicle rental expense."},{"code":"63100","desc":"LEASE PAYMENTS - FACILITIES","def":"Lease payments for facilities."},{"code":"63110","desc":"LEASE PAYMENTS - EQUIPMENT","def":"Lease payments for equipment."}]},
-  "63200":{"label":"COMPUTER SERVICES","definition":"Technology-related service costs including software licenses, hardware maintenance, desktop support (CUIT), web services, data management, and copier-related expenses.","interpret":"Software and computing costs must be project-specific to be directly charged. General-use software (university-wide licenses) is typically an indirect cost and cannot be charged directly.","why":"IT costs are frequently challenged on audits. Only computing services directly required for the specific project may be direct-charged.","naturalAccounts":[{"code":"63202","desc":"SERVICES-COMPUTER SERVICES GEN","def":"General computer service expense."},{"code":"63240","desc":"HARDWARE MAINTENANCE","def":"Maintenance costs for computer hardware."},{"code":"63245","desc":"SOFTWARE MAINTENANCE","def":"Maintenance costs for software systems."},{"code":"63260","desc":"SOFTWARE PURCHASE","def":"Purchase of software packages or licenses."},{"code":"63265","desc":"SOFTWARE LICENSE","def":"Software license fees."},{"code":"63280","desc":"WEB EXPENSES","def":"Website-related expenses."},{"code":"63290","desc":"COPIER MAINTENANCE","def":"Copier maintenance costs."}]},
-  "63400":{"label":"COMMUNICATIONS","definition":"Postage, shipping, courier, telephone, mobile, and internet service charges related to project communications and deliverables.","interpret":"General telephone and internet are indirect costs. Only project-specific communications (shipping samples, courier for subcontract documents) are directly chargeable. The $12.50 here should be reviewed for accuracy.","why":"Small miscellaneous communication charges still require a clear project connection to be allowable on a sponsored award.","naturalAccounts":[{"code":"63405","desc":"COMMUNICATIONS - GENERAL","def":"General communications expense."},{"code":"63450","desc":"FREIGHT & PARCEL SHIPPING","def":"Freight and parcel shipping costs."},{"code":"63460","desc":"OVERNIGHT COURIER","def":"Overnight courier charges."},{"code":"63465","desc":"INTERNATIONAL COURIER","def":"International courier charges."},{"code":"63475","desc":"POSTAGE - GENERAL","def":"General postage expenses."},{"code":"63477","desc":"POSTAGE - DOMESTIC","def":"Domestic postage expenses."},{"code":"63479","desc":"POSTAGE - INTERNATIONAL","def":"International postage expenses."}]},
-  "64000":{"label":"SERVICES","definition":"Broad category covering services from external vendors: facilities services, medical services, meetings and events, office support, data services, audio-visual, subscriptions, and other contracted work.","interpret":"Review individual transactions to confirm each service was rendered for the project. The negative encumbrance (-$8,940.50) indicates a PO was canceled or reduced after creation.","why":"Services costs are varied and require documentation. Each service must be allocable and supported by a contract, invoice, or service agreement.","naturalAccounts":[{"code":"64005","desc":"SERVICES - GENERAL","def":"General services purchased from vendors."},{"code":"64100","desc":"MEDICAL SERVICES","def":"General medical service expense."},{"code":"64110","desc":"LAB SERVICES","def":"Laboratory service charges."},{"code":"64200","desc":"OUTSOURCED SERVICES-GENERAL","def":"General outsourced services."},{"code":"64305","desc":"PHOTOGRAPHIC SERVICE","def":"Professional photography services."},{"code":"64320","desc":"TRANSLATIONS","def":"Translation service expense."},{"code":"64325","desc":"AUDIO VISUAL SERV","def":"Audio-visual service expense."},{"code":"64330","desc":"SUBSCRIPTIONS","def":"Subscription expense."},{"code":"64335","desc":"MEMBERSHIP COSTS","def":"Membership dues."},{"code":"64350","desc":"MEETINGS AND EVENTS","def":"Meeting and event costs."},{"code":"64365","desc":"CONFERENCE FEES","def":"Conference registration or participation fees."}]},
-  "64500":{"label":"CONSULTANTS","definition":"Payments to individuals or firms providing professional expertise: general consultants, legal fees, temporary staff, lecturers, medical professionals, honoraria, and staffing agencies.","interpret":"This account is significantly over budget (budget $245K, total obligations $980K). Immediate attention required. Verify whether a budget modification was approved or charges need to move to another source.","why":"Consultant costs require written agreements and must meet sponsor allowability standards. Federal awards require that consultants not be used to circumvent personnel ceilings.","naturalAccounts":[{"code":"64505","desc":"CONSULTANTS-GENERAL","def":"General consulting expense."},{"code":"64507","desc":"CONSULTANTS - TRAVEL EXP","def":"Travel expenses paid for consultants."},{"code":"64580","desc":"LEGAL FEES","def":"Legal fee expense."},{"code":"64600","desc":"TEMPORARY HELP","def":"Temporary help or staffing services."},{"code":"64620","desc":"LECTURER FEES","def":"Lecturer fee expense."},{"code":"64630","desc":"MEDICAL PROFESSIONAL FEES","def":"Fees paid to medical professionals."},{"code":"64640","desc":"HONORARIUM","def":"Honorarium payments to guest speakers or contributors."},{"code":"64645","desc":"HONORARIUM-NRA","def":"Honorarium payments to nonresident aliens."}]},
-  "65000":{"label":"SUBCONTRACTS","definition":"Agreements with external organizations (universities, companies, nonprofits) to perform a substantive portion of the sponsored project scope. Split into MTDC-included (first $25K per subcontract) and MTDC-excluded amounts.","interpret":"At 100% usage with a slight over-obligation (-$5,850). The large encumbrance ($1.98M) means substantial payments are still pending. Monitor subcontractor invoicing and deliverables closely.","why":"Subcontracts are high-value and complex. Each requires a formal agreement, flow-down of sponsor terms, and periodic monitoring of subrecipient performance.","naturalAccounts":[{"code":"65010","desc":"SUBCONTRACTS IN MTDC","def":"Subcontracts included in the MTDC base (first $25,000 per subcontract)."},{"code":"65020","desc":"SUBCONTRACTS OUT OF MTDC","def":"Subcontract amounts above $25,000 per subcontract, excluded from MTDC base."}]},
-  "65200":{"label":"DOMESTIC TRAVEL","definition":"Travel within the United States including airfare, ground transportation, lodging, meals per diem, and conference fees for project personnel and participants.","interpret":"At 36-38% utilization with the project well along its timeline, domestic travel is under-paced. Consider whether planned travel is still expected or if the budget needs realignment. Fly America Act applies to federal awards.","why":"Travel must be essential to the project and comply with government travel regulations including the Fly America Act and federal per diem rates.","naturalAccounts":[{"code":"65205","desc":"DOMESTIC TRAVEL-GENERAL","def":"General domestic travel expense."},{"code":"65210","desc":"DOMESTIC-TRANSPORTATION","def":"Domestic transportation: airfare, train, taxi, rideshare."},{"code":"65220","desc":"DOMESTIC-MEALS","def":"Domestic meal expense."},{"code":"65230","desc":"DOMESTIC-LODGING","def":"Domestic lodging expense."},{"code":"65270","desc":"DOMESTIC-FIELD TRIPS","def":"Domestic field trip expense."},{"code":"65275","desc":"DOMESTIC-CONFERENCE FEES","def":"Domestic conference registration fees."},{"code":"65279","desc":"DOMESTIC-PARTICIPANT SUPP COST","def":"Domestic participant support costs."}]},
-  "65300":{"label":"INTERNATIONAL TRAVEL","definition":"Travel outside the United States including international airfare, in-country ground transportation, lodging, meals, and conference fees.","interpret":"Charges ($6,920) against a zero budget create a negative balance. International travel must be budgeted. If not in the approved budget, prior sponsor approval may be required.","why":"International travel on federal awards requires prior approval if not in the approved budget. All foreign air travel must comply with the Fly America Act unless exceptions apply.","naturalAccounts":[{"code":"65305","desc":"INTERNATIONAL TRAVEL-GENERAL","def":"General international travel expense."},{"code":"65310","desc":"INTERNATIONAL-TRANSPORTATION","def":"International transportation expense."},{"code":"65315","desc":"INTERNATIONAL-IN COUNTRY TRAVE","def":"Travel within a foreign country."},{"code":"65320","desc":"INTERNATIONAL-MEALS","def":"International meal expense."},{"code":"65330","desc":"INTERNATIONAL-LODGING","def":"International lodging expense."},{"code":"65375","desc":"INTERNATIONAL-CONFERENCE FEES","def":"International conference registration fees."}]},
-  "65600":{"label":"ANIMAL CARE","definition":"Costs for care, acquisition, and use of animals in research, including per diem housing, veterinary services, surgical procedures, and internal cost mechanism (ICM) charges from the animal facility.","interpret":"Charges ($740) against a zero budget may indicate unplanned animal use or a misallocation. All animal use must be covered by an approved IACUC protocol.","why":"Animal care costs must directly relate to approved research protocols. IACUC approval is required and charges must match documented usage.","naturalAccounts":[{"code":"65601","desc":"ICM ACQUISITIONS","def":"Internal cost mechanism - animal acquisition expense."},{"code":"65603","desc":"ICM HUSBANDRY","def":"Internal cost mechanism - daily animal husbandry expense."},{"code":"65605","desc":"ICM VET MEDICINE","def":"Internal cost mechanism - veterinary medicine expense."},{"code":"65611","desc":"ICM SURGERY","def":"Internal cost mechanism - surgical procedure expense."},{"code":"65613","desc":"ICM PER DIEM","def":"Internal cost mechanism - daily per diem charge for animal housing."},{"code":"65630","desc":"ANIMAL-MOUSE","def":"Animal care cost for mice."},{"code":"65644","desc":"ANIMAL-MONKEY","def":"Animal care cost for monkeys."}]},
-  "66000":{"label":"OTHER EXPENSES","definition":"Miscellaneous project expenses not captured elsewhere: licenses, permits, bank fees, relocation costs, institutional allowances, inter-business-unit charges, and similar items.","interpret":"Charges ($30,810) against a zero budget. Other expenses are catch-all postings -- each transaction should be reviewed for allowability and allocability, as auditors scrutinize miscellaneous charges.","why":"Vague or miscellaneous categories are high-risk on sponsored awards. Every charge must have a clear business purpose and project connection.","naturalAccounts":[{"code":"66005","desc":"OTHER EXPENSES-GENERAL","def":"General other expense not categorized elsewhere."},{"code":"66040","desc":"RELOCATION AND MOVING COSTS","def":"Relocation and moving cost expense."},{"code":"66090","desc":"LICENSE","def":"License fee expense."},{"code":"66095","desc":"PERMITS","def":"Permit expense."},{"code":"66115","desc":"BACKGROUND CHECKS","def":"Background check expense."},{"code":"66120","desc":"BANK FEES","def":"Bank fee expense."},{"code":"66126","desc":"Currency Gain/Loss Charge Out","def":"Currency gain or loss charge-out."},{"code":"66140","desc":"PRIZES /AWARD NONSTUDENTS","def":"Prizes or awards paid to non-students."},{"code":"66301","desc":"INSTITUTIONAL ALLOWANCE","def":"Institutional allowance expense."},{"code":"66306","desc":"POSTDOC HEALTH BENEFITS","def":"Postdoctoral health benefit expense."}]},
-  "69800":{"label":"F&A DEDUCTION","definition":"Facilities and Administrative (indirect) costs charged based on the negotiated F&A rate applied to the Modified Total Direct Costs (MTDC) base. Represents the University's recovery of overhead and administrative costs.","interpret":"F&A is system-calculated. At 68-72% usage it is slightly under-paced. The report footer warning is critical: F&A is not final until the month is closed. Do not use for invoicing until the period closes.","why":"The F&A rate and base are approved by the federal government. Reviewing F&A confirms the MTDC base is being calculated correctly and that overhead recovery is on track.","naturalAccounts":[{"code":"69810","desc":"F&A DEDUCTION GOVT ALLOCATION","def":"Allocation adjustment for government F&A deductions."},{"code":"69811","desc":"F&A DEDUCTION PRIV ALLOCATION","def":"Allocation adjustment for private sponsor F&A deductions."},{"code":"69820","desc":"F&A DEDUCTION-GOVT MAN ADJ","def":"Manual adjustment for government F&A deductions."},{"code":"69821","desc":"F&A DEDUCTION GOVT SYS ADJ","def":"System adjustment for government F&A deductions."},{"code":"69840","desc":"F&A DEDUCTION GOVT ACCRUAL","def":"Accrued adjustment for government F&A deductions."},{"code":"69841","desc":"F&A DEDUCTION PRIV ACCRUAL","def":"Accrued adjustment for private sponsor F&A deductions."}]}
+  "61151":{"label":"GRA TUITION","definition":"Graduate research assistant tuition charged directly to the sponsored project.","interpret":"GRA tuition is one of the largest non-salary costs on research grants. Each charge should correspond to an active GRA appointment.","why":"Sponsors vary on GRA tuition policy. NSF and NIH generally allow it as a direct cost when a GRA appointment exists.","naturalAccounts":[{"code":"61160","desc":"GRA TUITION - DIRECT CHARGE","def":"Graduate research assistant tuition charged directly to a grant."},{"code":"61165","desc":"GRA TUITION-RECOVERY-GOVT","def":"Recovery of GRA tuition from government sources."},{"code":"61166","desc":"GRA TUITION-RECOVERY-NONGOVT","def":"Recovery of GRA tuition from non-government sources."},{"code":"61167","desc":"GRA TUITION-TRANSFER","def":"Transfer entry for GRA tuition."}]},
+  "61400":{"label":"SUPPLIES AND MATERIALS","definition":"Expendable supplies and materials consumed in the project.","interpret":"Supplies should be project-specific and directly used in the research.","why":"Supplies must be allocable to the project. Stockpiling is not allowable.","naturalAccounts":[{"code":"61405","desc":"SUPPLIES AND MATERIALS-GENERAL","def":"General supplies and materials."},{"code":"61410","desc":"OFFICE SUPPLIES-GENERAL","def":"Office supplies."},{"code":"61500","desc":"LAB SUPPLIES-GENERAL","def":"General laboratory supplies."}]},
+  "61900":{"label":"MINOR EQUIPMENT","definition":"Equipment purchases below the capitalization threshold.","interpret":"Charges against a zero budget signal unbudgeted equipment purchases.","why":"Minor equipment must be used exclusively for project purposes.","naturalAccounts":[{"code":"61910","desc":"MINOR EQUIPMENT-GENERAL","def":"General minor equipment purchases not capitalized."},{"code":"61925","desc":"MINOR EQUIPMENT-COMPUTERS","def":"Purchase of smaller computer equipment."}]},
+  "62000":{"label":"PUBLICATIONS","definition":"Costs related to publishing or disseminating research results.","interpret":"Publication costs are generally allowable when they represent dissemination of sponsored research findings.","why":"NIH and NSF now require open-access publication.","naturalAccounts":[{"code":"62005","desc":"PUBLICATION COSTS-GENERAL","def":"General publication costs."},{"code":"62020","desc":"PRINTING COSTS","def":"External printing costs."}]},
+  "63000":{"label":"RENTALS","definition":"Rental or lease payments for facilities, equipment, or vehicles.","interpret":"Charges against zero budget indicates space or equipment rented without prior budget planning.","why":"Rental costs must be allocable specifically to the project.","naturalAccounts":[{"code":"63005","desc":"RENTAL - GENERAL","def":"General rental expenses."},{"code":"63010","desc":"RENTAL - FACILITIES","def":"Rental of facilities or space."}]},
+  "63200":{"label":"COMPUTER SERVICES","definition":"Technology-related service costs including software licenses and hardware maintenance.","interpret":"Software and computing costs must be project-specific to be directly charged.","why":"IT costs are frequently challenged on audits.","naturalAccounts":[{"code":"63260","desc":"SOFTWARE PURCHASE","def":"Purchase of software packages or licenses."},{"code":"63265","desc":"SOFTWARE LICENSE","def":"Software license fees."}]},
+  "63400":{"label":"COMMUNICATIONS","definition":"Postage, shipping, courier, telephone, and internet service charges.","interpret":"General telephone and internet are indirect costs. Only project-specific communications are directly chargeable.","why":"Small miscellaneous communication charges still require a clear project connection.","naturalAccounts":[{"code":"63405","desc":"COMMUNICATIONS - GENERAL","def":"General communications expense."},{"code":"63450","desc":"FREIGHT & PARCEL SHIPPING","def":"Freight and parcel shipping costs."}]},
+  "64000":{"label":"SERVICES","definition":"Broad category covering services from external vendors.","interpret":"Review individual transactions to confirm each service was rendered for the project.","why":"Services costs are varied and require documentation.","naturalAccounts":[{"code":"64005","desc":"SERVICES - GENERAL","def":"General services purchased from vendors."},{"code":"64350","desc":"MEETINGS AND EVENTS","def":"Meeting and event costs."}]},
+  "64500":{"label":"CONSULTANTS","definition":"Payments to individuals or firms providing professional expertise.","interpret":"This account is significantly over budget. Immediate attention required.","why":"Consultant costs require written agreements and must meet sponsor allowability standards.","naturalAccounts":[{"code":"64505","desc":"CONSULTANTS-GENERAL","def":"General consulting expense."},{"code":"64600","desc":"TEMPORARY HELP","def":"Temporary help or staffing services."}]},
+  "65000":{"label":"SUBCONTRACTS","definition":"Agreements with external organizations to perform a substantive portion of the project scope.","interpret":"At 100% usage with a slight over-obligation. Monitor subcontractor invoicing closely.","why":"Subcontracts are high-value and complex. Each requires a formal agreement.","naturalAccounts":[{"code":"65010","desc":"SUBCONTRACTS IN MTDC","def":"Subcontracts included in the MTDC base (first $25,000 per subcontract)."},{"code":"65020","desc":"SUBCONTRACTS OUT OF MTDC","def":"Subcontract amounts above $25,000 per subcontract, excluded from MTDC base."}]},
+  "65200":{"label":"DOMESTIC TRAVEL","definition":"Travel within the United States for project personnel.","interpret":"At 36-38% utilization with the project well along its timeline, domestic travel is under-paced.","why":"Travel must be essential to the project and comply with government travel regulations.","naturalAccounts":[{"code":"65205","desc":"DOMESTIC TRAVEL-GENERAL","def":"General domestic travel expense."},{"code":"65210","desc":"DOMESTIC-TRANSPORTATION","def":"Domestic transportation."}]},
+  "65300":{"label":"INTERNATIONAL TRAVEL","definition":"Travel outside the United States.","interpret":"Charges against a zero budget create a negative balance. International travel must be budgeted.","why":"International travel on federal awards requires prior approval if not in the approved budget.","naturalAccounts":[{"code":"65305","desc":"INTERNATIONAL TRAVEL-GENERAL","def":"General international travel expense."},{"code":"65310","desc":"INTERNATIONAL-TRANSPORTATION","def":"International transportation expense."}]},
+  "65600":{"label":"ANIMAL CARE","definition":"Costs for care, acquisition, and use of animals in research.","interpret":"Charges against a zero budget may indicate unplanned animal use or a misallocation.","why":"Animal care costs must directly relate to approved research protocols.","naturalAccounts":[{"code":"65601","desc":"ICM ACQUISITIONS","def":"Internal cost mechanism - animal acquisition expense."},{"code":"65613","desc":"ICM PER DIEM","def":"Internal cost mechanism - daily per diem charge for animal housing."}]},
+  "66000":{"label":"OTHER EXPENSES","definition":"Miscellaneous project expenses not captured elsewhere.","interpret":"Charges against a zero budget. Other expenses are catch-all postings -- each transaction should be reviewed.","why":"Vague or miscellaneous categories are high-risk on sponsored awards.","naturalAccounts":[{"code":"66005","desc":"OTHER EXPENSES-GENERAL","def":"General other expense not categorized elsewhere."},{"code":"66040","desc":"RELOCATION AND MOVING COSTS","def":"Relocation and moving cost expense."}]},
+  "69800":{"label":"F&A DEDUCTION","definition":"Facilities and Administrative (indirect) costs charged based on the negotiated F&A rate.","interpret":"F&A is system-calculated. The report footer warning is critical: F&A is not final until the month is closed.","why":"The F&A rate and base are approved by the federal government.","naturalAccounts":[{"code":"69810","desc":"F&A DEDUCTION GOVT ALLOCATION","def":"Allocation adjustment for government F&A deductions."},{"code":"69820","desc":"F&A DEDUCTION-GOVT MAN ADJ","def":"Manual adjustment for government F&A deductions."}]}
 };
-
 var FIELDS = {
-  actual_to_date_group:{label:"Actual to Date (Does not include Accruals)",what:"The grouped section showing actual posted expenses only -- excluding accruals and open vouchers, which appear separately under Commitment.",interpret:"Use this to understand what has hit the ledger as real expense activity. Shows posted spending by month, fiscal year, and project life, plus the balance before pending commitments.",why:"Clearest view of actual spending without mixing in pending obligations. Core area for understanding how much has truly posted.",related:"Includes: Month Actuals, Fiscal Year to Date, Project to Date, and Balance Before Commitment. Read with the Commitment section."},
-  commitment_group:{label:"Commitment",what:"The grouped section showing funds spoken for but not yet fully posted as final expenses. Includes encumbrances, pre-encumbrances, and accruals or open vouchers.",interpret:"What is still in the pipeline. These obligations reduce true available balance even if not yet in posted actuals.",why:"Without reviewing commitments, a project can appear healthier than it really is.",related:"Includes: Encumbrance, Pre-Encumbrance, and Accruals or Open Vouchers. Review with Balance Before Commitment and Budget Balance Available."},
-  project_id:{label:"Project ID",what:"The unique identifier assigned to the sponsored project in the financial system. This training project is UR012345 - ENG Training.",interpret:"The project's system fingerprint. Every transaction, report, and communication references this to tie activity to the correct award.",why:"Confirms that financial activity belongs to the correct project.",related:"Use with Project Title, Project Description, Sponsor, and Project Period."},
-  activity_managers:{label:"Activity Manager(s)",what:"The individual or individuals responsible for managing the project activity reported in FDS.",interpret:"Identifies who has oversight responsibility for the selected activity grouping shown.",why:"Connects financial activity to the person responsible for monitoring that portion of the project.",related:"Use with Project Manager, Selected Activity, and Activity Period."},
-  project_description:{label:"Project Description",what:"A short descriptive label for the project recorded in the financial system.",interpret:"Quick readable identifier for the project before reviewing financial data.",why:"Helps validate you are looking at the right project.",related:"Paired with Project ID and Project Title."},
-  project_manager:{label:"Project Manager",what:"The individual designated as the manager of the project in the system.",interpret:"Identifies overall project management responsibility for the award.",why:"Connects financial performance to operational ownership.",related:"Use with Activity Manager(s), Project Owning Dept, and Project Title."},
-  project_owning_dept:{label:"Project Owning Department",what:"The department that owns the project -- its administrative home in the financial system.",interpret:"The organizational unit administratively responsible for the award.",why:"Confirms departmental ownership and where financial oversight sits.",related:"Use with Project Manager, Project ID, and Project Title."},
-  project_title:{label:"Project Title",what:"The formal title of the sponsored project as recorded in the system.",interpret:"Full descriptive name of the award being reported.",why:"Verifies the correct award is being reviewed beyond the project ID.",related:"Paired with Project ID and Project Description."},
-  project_budget:{label:"Project Budget",what:"Total funds awarded and budgeted for this sponsored project across its full lifetime. Updated when budget modifications are processed.",interpret:"Your ceiling. Every expense, commitment, and encumbrance is measured against this number.",why:"Without a clear budget, spending cannot be monitored. It is the denominator in % Used and Burn Rate.",related:"Compare against Budget Balance Available. Feeds into % Used (Total Actuals and Commitments divided by Project Budget)."},
-  month_actuals:{label:"Month Actuals",what:"Expenses that posted during the current accounting month. Real, posted transactions -- not estimates.",interpret:"High Month Actuals in salary is normal during payroll. An unexpected spike in a non-payroll category warrants review.",why:"Understand spending pace in the current period. Catch posting errors before the period closes.",related:"Rolls up into Fiscal Year to Date and Project to Date. Does not include accruals."},
-  fiscal_year_to_date:{label:"Fiscal Year to Date",what:"Cumulative actual expenses posted from the start of the current fiscal year (July 1) through the report date.",interpret:"9 months into the fiscal year typically means about 75% of annual budget should appear here.",why:"Identifies whether spending is on track within the fiscal year.",related:"Subset of Project to Date. If close to Project to Date, most spending is in the current year."},
-  project_to_date:{label:"Project to Date",what:"Total cumulative actual expenses posted for the entire life of the project -- award start through report date.",interpret:"Most important actuals column for long-running grants. Total real dollars since inception.",why:"Sponsors fund across multiple fiscal years. This is what matters for total expenditures against the award.",related:"Feeds Budget Balance Available calculation."},
-  balance_before_commitment:{label:"Balance Before Commitment",what:"Remaining budget after subtracting only posted actuals -- before accounting for open commitments.",interpret:"Your 'optimistic' balance. A large gap between this and Budget Balance Available signals significant open commitments.",why:"Never use this alone to decide whether you can spend more.",related:"Subtract Encumbrance, Pre-Encumbrance, and Accruals to get Budget Balance Available."},
-  encumbrance:{label:"Encumbrance",what:"Funds legally obligated through an approved purchase order for goods or services not yet received or invoiced.",interpret:"A firm obligation. Cannot be reallocated without canceling the PO.",why:"Ensures you do not inadvertently spend committed funds. A common cause of overspending on grants.",related:"Becomes a Project to Date actual once goods are received and invoiced."},
-  pre_encumbrance:{label:"Pre-Encumbrance",what:"Funds reserved via a submitted purchase requisition not yet converted to a purchase order.",interpret:"Less firm than an Encumbrance. May still be modified or canceled. Still reduces available budget.",why:"Provides early visibility into spending plans. Immediately reserves funds on requisition submission.",related:"Becomes Encumbrance once converted to a PO."},
-  accruals_open_vouchers:{label:"Accruals or Open Vouchers",what:"Expenses incurred but not yet posted to the ledger, plus open payment vouchers awaiting processing.",interpret:"Most relevant at month-end and fiscal year-end. An open voucher is an invoice received but not yet paid.",why:"Accruals ensure expenses are recognized in the correct period. F&A is not final until month is closed.",related:"Not included in Actual to Date columns. Included in Total Actuals and Commitments."},
-  total_actuals_commitments:{label:"Total Actuals and Commitments",what:"Sum of Project to Date actuals plus all commitments: Encumbrances, Pre-Encumbrances, and Accruals. The most complete obligation picture.",interpret:"Your true total obligation. If this exceeds Project Budget, the project is over-committed.",why:"The number sponsors and auditors care about most.",related:"Budget Balance Available = Project Budget minus this figure. Also drives % Used."},
-  budget_balance_available:{label:"Budget Balance Available",what:"Remaining unobligated budget: Project Budget minus Total Actuals and Commitments.",interpret:"Your true remaining budget. Positive = available. Negative (red/parentheses) = over-committed, requires immediate action.",why:"Most actionable number on the report. Always review before approving purchases or hiring on a grant.",related:"Derived from Project Budget and Total Actuals and Commitments. Works with % Used and Burn Rate."},
-  pct_used:{label:"% Used",what:"Percentage of Project Budget expended or committed: (Total Actuals and Commitments / Project Budget) x 100.",interpret:"Compare against project time elapsed. 95% used with 60% time elapsed = problem requiring attention.",why:"Quick health indicator. Grants managers flag projects above 90% or significantly under-paced.",related:"Works with Burn Rate %. % Used is the snapshot; Burn Rate adds the time dimension."},
-  burn_rate:{label:"Burn Rate %",what:"Pace of spending relative to time elapsed on the project -- how fast the budget is being consumed.",interpret:"100% = on pace. Below 100% = under-spending. Above 100% = burning faster than the timeline allows.",why:"Critical for forecasting. High burn rate signals an impending budget problem.",related:"Complements % Used. % Used = where you are; Burn Rate = how fast you're getting there."},
-  sponsor:{label:"Sponsor",what:"The external organization funding this project. Recorded at award setup.",interpret:"Determines cost principles, regulations, and reporting requirements. Federal sponsors (NSF, NIH, DOD) follow Uniform Guidance (2 CFR 200).",why:"Essential for compliance. Different sponsors have different rules on allowable costs, travel, and indirect rates.",related:"The sponsor code is used across all FDS reports."},
-  activity_type:{label:"Activity Type",what:"Classification code indicating the type of budget activity. BPALL = all budget periods rolled up together.",interpret:"Allows segmentation of financial data by purpose or period.",why:"Useful when a project has multiple funding periods, sub-awards, or cost-sharing components.",related:"Works with Selected Activity to control data scope."},
-  selected_activity:{label:"Selected Activity",what:"Defines data scope. 'All - Roll up Activities by Project' aggregates all activities for the entire project.",interpret:"Set to 'All' means every figure represents the total across the project's full scope.",why:"Ensures you are looking at the right level of data for your review.",related:"Tied to Activity Type. Both control the scope of every column in the report."},
-  project_period:{label:"Project Period",what:"Full approved start and end dates of the sponsored project as awarded by the sponsor.",interpret:"Expenses outside the project period are generally unallowable and must be removed.",why:"The authoritative date range for the grant. All activity must fall within this window.",related:"Activity Period and Award Period should align with this."},
-  activity_period:{label:"Activity Period",what:"Start and end dates for the specific activity or budget period currently reported.",interpret:"Funds from one activity period typically cannot be spent in another without sponsor approval.",why:"Sponsors release funds annually. Tracking by period ensures correct-year management.",related:"Nested within Project Period. Selected Activity determines which period's data is shown."},
-  award_period:{label:"Award Period",what:"Date range covered by the current Notice of Award. May differ from Project Period if amended.",interpret:"If shorter than Project Period, only partial funding may have been released.",why:"Charges outside the award period are typically unallowable.",related:"Works with Project Period and Activity Period. Discrepancies should be discussed with your SPA."},
-  total_direct_expense:{label:"Total Direct Expense",what:"Total of all direct expense categories: salary, fringe, supplies, travel, services, subcontracts, and other direct costs.",interpret:"Overall direct spending position before F&A is added.",why:"Critical summary line for the main programmatic expenses of the project.",related:"Read with Total F&A Expense and Total Expense."},
-  total_fa_expense:{label:"Total F&A Expense",what:"Total Facilities and Administrative (indirect) costs recognized on the report.",interpret:"How much indirect cost has been charged relative to the F&A budget.",why:"F&A is a major project cost component. Review separately to distinguish direct spending from indirect recovery.",related:"Read with Total Direct Expense and Total Expense. F&A not final until month closes."},
-  total_expense:{label:"Total Expense",what:"Grand total of all project expense: direct costs plus F&A. The highest-level financial summary.",interpret:"Single row showing total budget, actuals, commitments, remaining balance, and usage metrics.",why:"Most complete summary line. Clearest overall picture of total financial obligation.",related:"Ties together Total Direct Expense and Total F&A Expense."}
+  actual_to_date_group:{label:"Actual to Date (Does not include Accruals)",what:"The grouped section showing actual posted expenses only.",interpret:"Use this to understand what has hit the ledger as real expense activity.",why:"It isolates posted spending from pending obligations.",related:"Includes Month Actuals, Fiscal Year to Date, Project to Date, and Balance Before Commitment."},
+  commitment_group:{label:"Commitment",what:"The grouped section showing funds spoken for but not yet fully posted as final expenses.",interpret:"These obligations reduce true available balance even if not yet in posted actuals.",why:"Without reviewing commitments, a project can appear healthier than it really is.",related:"Includes Encumbrance, Pre-Encumbrance, and Accruals or Open Vouchers."},
+  project_description:{label:"Project Description",what:"A short descriptive label for the project recorded in the financial system.",interpret:"Use it as a quick readable identifier before reviewing financial data.",why:"It helps validate you are looking at the right project.",related:"Paired with Project ID and Project Title."},
+  project_manager:{label:"Project Manager",what:"The individual designated as the manager of the project in the system.",interpret:"Identifies overall project management responsibility for the award.",why:"It connects financial performance to operational ownership.",related:"Use with Activity Manager(s), Project Owning Dept, and Project Title."},
+  project_owning_dept:{label:"Project Owning Department",what:"The department that owns the project in the financial system.",interpret:"The organizational unit administratively responsible for the award.",why:"It clarifies where financial oversight sits.",related:"Use with Project Manager, Project ID, and Project Title."},
+  project_title:{label:"Project Title",what:"The formal title of the project as recorded in the system.",interpret:"Read it as the full descriptive name of the award or initiative being reviewed.",why:"It confirms you are reviewing the intended project.",related:"Use with Project ID and Project Description."},
+  project_id:{label:"Project ID",what:"The unique identifier assigned to the project in the financial system.",interpret:"Every transaction and report references this identifier.",why:"It confirms activity belongs to the correct project.",related:"Use with Project Title, Project Description, Sponsor, and Project Period."},
+  activity_managers:{label:"Activity Manager(s)",what:"The individual or individuals responsible for managing the reported activity.",interpret:"Identifies who has oversight responsibility for the selected activity grouping.",why:"It connects the financial view to accountability.",related:"Use with Project Manager, Selected Activity, and Activity Period."},
+  sponsor:{label:"Sponsor",what:"The external organization funding this project.",interpret:"The sponsor often determines cost principles, reporting requirements, and allowability rules.",why:"Different sponsors can impose different compliance rules.",related:"Use with Award Period, budget interpretation, and allowability review."},
+  activity_type:{label:"Activity Type",what:"Classification code indicating the type of budget activity.",interpret:"It helps determine how data is grouped or rolled up.",why:"Useful when a project contains multiple activity layers or periods.",related:"Works with Selected Activity to control data scope."},
+  selected_activity:{label:"Selected Activity",what:"Defines the data scope shown on the report.",interpret:"All - Roll up Activities by Project means figures reflect the full project rollup.",why:"It ensures you are reviewing the right level of data.",related:"Tied to Activity Type and Activity Period."},
+  project_period:{label:"Project Period",what:"Fully approved start and end dates of the project.",interpret:"Expenses outside the project period are generally unallowable and must be removed.",why:"All activity must fall within this window.",related:"Activity Period and Award Period"},
+  activity_period:{label:"Activity Period",what:"The start and end dates for the specific activity or budget period currently being reported.",interpret:"Use it when reviewing spending within a specific funding or reporting slice.",why:"It helps ensure spending is interpreted within the correct period context.",related:"Read with Project Period, Award Period, and Selected Activity."},
+  award_period:{label:"Award Period",what:"The specific date range covered by the current award or funding action.",interpret:"Always confirm the award period when reviewing budget availability.",why:"Expenditures and obligations must tie to a valid award period.",related:"Works alongside the Project Period and Activity Period."},
+  project_budget:{label:"Project Budget",what:"Total funds budgeted for the project across its life.",interpret:"This is the ceiling against which all spending and commitments are measured.",why:"Without a clear budget, spending cannot be monitored.",related:"Compare against Budget Balance Available and % Used."},
+  month_actuals:{label:"Month Actuals",what:"Expenses that posted during the current accounting month.",interpret:"Unexpected spikes in non-payroll categories should be reviewed.",why:"It helps you understand current-period spending pace.",related:"Rolls up into Fiscal Year to Date and Project to Date."},
+  fiscal_year_to_date:{label:"Fiscal Year to Date",what:"Cumulative actual expenses posted from the start of the current fiscal year through the report date.",interpret:"Use it to assess spending within the fiscal year context.",why:"It shows whether spending is pacing appropriately in the year.",related:"Subset of Project to Date."},
+  project_to_date:{label:"Project to Date",what:"Total cumulative actual expenses posted for the life of the project through the report date.",interpret:"This is the most important actuals column for long-running projects.",why:"Life-to-date spending is central to award monitoring.",related:"Feeds Budget Balance Available calculation."},
+  balance_before_commitment:{label:"Balance Before Commitment",what:"Remaining budget after subtracting only posted actuals.",interpret:"Use it as the optimistic balance before pending obligations are considered.",why:"It shows the gap between posted spending and true remaining budget.",related:"Read with Encumbrance, Pre-Encumbrance, and Budget Balance Available."},
+  encumbrance:{label:"Encumbrance",what:"Funds legally obligated through an approved purchase order for goods or services not yet fully invoiced.",interpret:"A firm obligation that reduces available budget.",why:"It prevents committed funds from being double-spent.",related:"Becomes actual expense once goods or services are received and invoiced."},
+  pre_encumbrance:{label:"Pre-Encumbrance",what:"Funds reserved by a submitted requisition not yet converted to a purchase order.",interpret:"Less firm than an encumbrance but still reduces available budget.",why:"It provides early visibility into planned spending.",related:"Typically becomes Encumbrance once converted to a PO."},
+  accruals_open_vouchers:{label:"Accruals or Open Vouchers",what:"Expenses incurred but not yet posted to the ledger, plus vouchers awaiting processing.",interpret:"Especially relevant at month-end and fiscal year-end.",why:"It keeps financial reporting aligned with the correct accounting period.",related:"Included in Total Actuals and Commitments but not in Actual to Date."},
+  total_actuals_commitments:{label:"Total Actuals and Commitments",what:"Sum of Project to Date actuals plus all commitments.",interpret:"This is the true total obligation picture.",why:"If this exceeds budget, the project is over-committed.",related:"Budget Balance Available = Project Budget minus this figure."},
+  budget_balance_available:{label:"Budget Balance Available",what:"Remaining unobligated budget after actuals and commitments.",interpret:"Positive means available. Negative means over-committed.",why:"This is the most actionable number on the report.",related:"Derived from Project Budget and Total Actuals and Commitments."},
+  pct_used:{label:"% Used",what:"Percentage of Project Budget expended or committed.",interpret:"Compare it against project time elapsed.",why:"It is a fast health indicator for the project.",related:"Works with Burn Rate %."},
+  burn_rate:{label:"Burn Rate %",what:"Pace of spending relative to time elapsed on the project.",interpret:"Above 100% means budget is being consumed faster than the timeline.",why:"It is critical for forecasting.",related:"Complements % Used."},
+  total_direct_expense:{label:"Total Direct Expense",what:"Total of all direct expense categories.",interpret:"Shows the overall direct spending position before F&A.",why:"It summarizes the main programmatic costs of the project.",related:"Read with Total F&A Expense and Total Expense."},
+  total_fa_expense:{label:"Total F&A Expense",what:"Total Facilities and Administrative costs recognized on the report.",interpret:"Shows how much indirect cost has been charged relative to budget.",why:"It separates overhead from direct project spending.",related:"Read with Total Direct Expense and Total Expense."},
+  total_expense:{label:"Total Expense",what:"Grand total of all project expense: direct costs plus F&A.",interpret:"Single row summary of total budget, actuals, commitments, and remaining balance.",why:"It gives the clearest overall picture of total obligation.",related:"Ties together Total Direct Expense and Total F&A Expense."},
+  nav_prev_period:{label:"Previous Accounting Period",what:"A navigation link that reloads the report for the immediately preceding accounting period.",interpret:"Use it to move backward one period at a time for comparisons.",why:"It supports period-over-period review and trend tracing.",related:"Works in tandem with Next Accounting Period."},
+  nav_trial_balance:{label:"Trial Balance by CF",what:"A linked report that presents a trial balance view of the project organized by cost function.",interpret:"Use it to reconcile posted ledger activity against this summary report.",why:"It helps verify that charges landed correctly in the accounting structure.",related:"Compare its balances to Project to Date on this report."},
+  nav_all_commitments:{label:"All Commitments",what:"A linked report that lists open commitment transactions in detail.",interpret:"Use it to identify what is driving encumbrance, pre-encumbrance, or accrual totals.",why:"This summary shows totals only; that report shows the source documents.",related:"Supplements the commitment columns on this report."},
+  nav_sapos_only:{label:"SAPOs Only",what:"A filtered view that restricts results to Sponsored Awards Purchase Orders.",interpret:"Use it to isolate grant-funded procurement activity.",why:"It separates sponsored purchasing from non-sponsored activity.",related:"Useful with All Commitments and subcontract review."},
+  nav_payroll_summary:{label:"Payroll Summary",what:"A linked report showing payroll charges to the project at a summarized level.",interpret:"Use it to confirm which employees had payroll charged in a given month.",why:"Salary is often the highest-value and most audited cost on a project.",related:"Compare totals here against Salary and Fringe on this report."},
+  nav_payroll_detail:{label:"Payroll Detail",what:"A linked report showing payroll transactions at the most granular level.",interpret:"Use it to verify a specific charge or investigate an adjustment.",why:"It is the authoritative source for transaction-level payroll data.",related:"Companion to Payroll Summary."},
+  nav_next_period:{label:"Next Accounting Period",what:"A navigation link that advances the report forward by one accounting period.",interpret:"Use it to move forward in time and see how spending evolved.",why:"It supports trend analysis without rerunning the report.",related:"Works in tandem with Previous Accounting Period."}
 };
+var allClickables = [], tabIndex = -1, activeEl = null, activeKey = null;
+function buildTabList(){ allClickables = Array.from(document.querySelectorAll('.clickable')); }
+function updateTabCounter(){ var c = document.getElementById('tab-counter'); if(tabIndex >= 0){ c.textContent = 'Field ' + (tabIndex + 1) + ' of ' + allClickables.length; c.classList.add('visible'); } else { c.classList.remove('visible'); } }
+function renderField(key){ var d = FIELDS[key]; if(!d) return; var isNav = key.indexOf('nav_') === 0; var badge = isNav ? 'nav-badge' : ''; document.getElementById('explain-content').innerHTML = '<div class="explain-field-name">' + d.label + '</div>' + '<div class="explain-section"><div class="tip-badge ' + badge + '">WHAT IT IS</div><div class="explain-section-body">' + d.what + '</div></div>' + '<div class="explain-section"><div class="tip-badge ' + badge + '">HOW TO INTERPRET</div><div class="explain-section-body">' + d.interpret + '</div></div>' + '<div class="explain-section"><div class="tip-badge ' + badge + '">WHY IT MATTERS</div><div class="explain-section-body">' + d.why + '</div></div>' + '<div class="explain-section"><div class="tip-badge ' + badge + '">RELATED FIELDS</div><div class="explain-section-body">' + d.related + '</div></div>'; document.getElementById('explain-panel').classList.add('open'); document.getElementById('explain-inner').scrollTop = 0; }
+function renderAcct(code){ var d = ACCT[code]; if(!d) return; var rows = ''; if(d.naturalAccounts && d.naturalAccounts.length){ rows = '<div class="nat-acct-list">'; for(var i = 0; i < d.naturalAccounts.length; i++){ var na = d.naturalAccounts[i]; rows += '<div class="na-row"><div class="na-code">' + na.code + '</div><div><div class="na-name">' + na.desc + '</div><div class="na-def">' + na.def + '</div></div></div>'; } rows += '</div>'; } document.getElementById('explain-content').innerHTML = '<div class="explain-field-name">' + code + ' &ndash; ' + d.label + '</div>' + '<div class="explain-section"><div class="tip-badge acct-badge">WHAT IT COVERS</div><div class="explain-section-body">' + d.definition + '</div></div>' + '<div class="explain-section"><div class="tip-badge acct-badge">HOW TO INTERPRET</div><div class="explain-section-body">' + d.interpret + '</div></div>' + '<div class="explain-section"><div class="tip-badge acct-badge">WHY IT MATTERS</div><div class="explain-section-body">' + d.why + '</div></div>' + (rows ? '<div class="explain-section"><div class="tip-badge acct-badge">NATURAL ACCOUNTS UNDER THIS CODE</div>' + rows + '</div>' : ''); document.getElementById('explain-panel').classList.add('open'); document.getElementById('explain-inner').scrollTop = 0; }
+function openPanel(key, el, isAcct){ if(activeEl === el && activeKey === key){ closePanel(); return; } if(activeEl) activeEl.classList.remove('active'); activeEl = el; activeKey = key; if(el) el.classList.add('active'); if(!isAcct){ tabIndex = allClickables.indexOf(el); renderField(key); } else { renderAcct(key); } updateTabCounter(); }
+function closePanel(){ document.getElementById('explain-panel').classList.remove('open'); if(activeEl){ activeEl.classList.remove('active'); activeEl = null; } activeKey = null; tabIndex = -1; updateTabCounter(); }
+document.querySelectorAll('.clickable').forEach(function(el){ el.addEventListener('click', function(e){ e.stopPropagation(); openPanel(this.getAttribute('data-key'), this, false); }); el.addEventListener('keydown', function(e){ if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openPanel(this.getAttribute('data-key'), this, false); } }); });
+document.querySelectorAll('.acct-desc-clickable').forEach(function(el){ el.addEventListener('click', function(e){ e.stopPropagation(); openPanel(this.getAttribute('data-acct'), this, true); }); el.addEventListener('keydown', function(e){ if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openPanel(this.getAttribute('data-acct'), this, true); } }); });
+document.getElementById('panel-close').addEventListener('click', closePanel);
+document.addEventListener('keydown', function(e){
+  if (e.key === 'Escape') { deactivatePillNav(false); closePanel(); return; }
 
-var allClickables=[], tabIndex=-1, activeEl=null, activeKey=null;
-
-function buildTabList(){allClickables=Array.from(document.querySelectorAll('.clickable'));}
-
-function openPanel(key,el,isAcct){
-  if(activeEl===el && activeKey===key){closePanel();return;}
-  if(activeEl)activeEl.classList.remove('active');
-  activeEl=el; activeKey=key; el.classList.add('active');
-  if(!isAcct)tabIndex=allClickables.indexOf(el);
-  updateTabCounter();
-  isAcct ? renderAcct(key) : renderField(key);
-}
-
-function closePanel(){
-  document.getElementById('explain-panel').classList.remove('open');
-  if(activeEl){activeEl.classList.remove('active');activeEl=null;}
-  activeKey=null; tabIndex=-1; updateTabCounter();
-}
-
-function renderField(key){
-  var d=FIELDS[key]; if(!d)return;
-  document.getElementById('explain-content').innerHTML=
-    '<div class="explain-field-name">'+d.label+'</div>'+
-    '<div class="explain-section"><div class="tip-badge">WHAT IT IS</div><div class="explain-section-body">'+d.what+'</div></div>'+
-    '<div class="explain-section"><div class="tip-badge">HOW TO INTERPRET</div><div class="explain-section-body">'+d.interpret+'</div></div>'+
-    '<div class="explain-section"><div class="tip-badge">WHY IT MATTERS</div><div class="explain-section-body">'+d.why+'</div></div>'+
-    '<div class="explain-section"><div class="tip-badge">RELATED FIELDS</div><div class="explain-section-body">'+d.related+'</div></div>';
-  document.getElementById('explain-panel').classList.add('open');
-  document.getElementById('explain-inner').scrollTop=0;
-}
-
-function renderAcct(code){
-  var d=ACCT[code]; if(!d)return;
-  var rows='';
-  if(d.naturalAccounts&&d.naturalAccounts.length){
-    rows='<div class="nat-acct-list">';
-    for(var i=0;i<d.naturalAccounts.length;i++){
-      var na=d.naturalAccounts[i];
-      rows+='<div class="na-row"><div class="na-code">'+na.code+'</div><div><div class="na-name">'+na.desc+'</div><div class="na-def">'+na.def+'</div></div></div>';
+  if (e.key === 'ArrowUp') {
+    var activeNode = document.activeElement;
+    var tag = activeNode && activeNode.tagName;
+    if (tag !== 'INPUT' && tag !== 'TEXTAREA' && !(activeNode && activeNode.isContentEditable)) {
+      e.preventDefault();
+      activatePillNav();
     }
-    rows+='</div>';
+    return;
   }
-  document.getElementById('explain-content').innerHTML=
-    '<div class="explain-field-name">'+code+' &ndash; '+d.label+'</div>'+
-    '<div class="explain-section"><div class="tip-badge acct-badge">WHAT IT COVERS</div><div class="explain-section-body">'+d.definition+'</div></div>'+
-    '<div class="explain-section"><div class="tip-badge acct-badge">HOW TO INTERPRET</div><div class="explain-section-body">'+d.interpret+'</div></div>'+
-    '<div class="explain-section"><div class="tip-badge acct-badge">WHY IT MATTERS</div><div class="explain-section-body">'+d.why+'</div></div>'+
-    (rows?'<div class="explain-section"><div class="tip-badge acct-badge">NATURAL ACCOUNTS UNDER THIS CODE</div>'+rows+'</div>':'');
-  document.getElementById('explain-panel').classList.add('open');
-  document.getElementById('explain-inner').scrollTop=0;
-}
 
-function updateTabCounter(){
-  var c=document.getElementById('tab-counter');
-  if(tabIndex>=0){c.textContent='Field '+(tabIndex+1)+' of '+allClickables.length;c.classList.add('visible');}
-  else{c.classList.remove('visible');}
-}
-
-document.querySelectorAll('.clickable').forEach(function(el){
-  el.addEventListener('click',function(e){e.stopPropagation();openPanel(this.getAttribute('data-key'),this,false);});
-  el.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();openPanel(this.getAttribute('data-key'),this,false);}});
-});
-
-document.querySelectorAll('.acct-desc-clickable').forEach(function(el){
-  el.addEventListener('click',function(e){e.stopPropagation();openPanel(this.getAttribute('data-acct'),this,true);});
-  el.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();openPanel(this.getAttribute('data-acct'),this,true);}});
-});
-
-document.addEventListener('keydown',function(e){
-  if(e.key==='Escape'){closePanel();return;}
-  if(e.key==='Tab'){
-    var open=document.getElementById('explain-panel').classList.contains('open');
-    if(!open&&tabIndex===-1)return;
+  if (e.key === 'ArrowDown' && pillNavActive) {
     e.preventDefault();
-    if(!allClickables.length)return;
-    tabIndex=e.shiftKey?(tabIndex<=0?allClickables.length-1:tabIndex-1):(tabIndex>=allClickables.length-1?0:tabIndex+1);
-    var el=allClickables[tabIndex],key=el.getAttribute('data-key');
-    if(activeEl)activeEl.classList.remove('active');
-    activeEl=el;activeKey=key;el.classList.add('active');
-    el.scrollIntoView({behavior:'smooth',block:'nearest',inline:'nearest'});
-    renderField(key);updateTabCounter();
+    deactivatePillNav(true);
+    return;
+  }
+
+  if ((e.key === 'ArrowLeft' || e.key === 'ArrowRight') && pillNavActive) {
+    e.preventDefault();
+    pillFocusIndex = e.key === 'ArrowRight' ? pillFocusIndex + 1 : pillFocusIndex - 1;
+    setPillFocus(pillFocusIndex);
+    var pillEl = getPillEl(pillOrder[pillFocusIndex]);
+    if (pillEl) togglePill(pillEl);
+    return;
+  }
+
+  if (e.key === 'Tab') {
+    var open = document.getElementById('explain-panel').classList.contains('open');
+    if (!open && tabIndex === -1) return;
+    e.preventDefault();
+    if (!allClickables.length) return;
+    tabIndex = e.shiftKey ? (tabIndex <= 0 ? allClickables.length - 1 : tabIndex - 1) : (tabIndex >= allClickables.length - 1 ? 0 : tabIndex + 1);
+    var el = allClickables[tabIndex], key = el.getAttribute('data-key');
+    if (activeEl) activeEl.classList.remove('active');
+    activeEl = el;
+    activeKey = key;
+    el.classList.add('active');
+    el.scrollIntoView({behavior:'smooth', block:'nearest', inline:'nearest'});
+    renderField(key);
+    updateTabCounter();
   }
 });
-
-document.getElementById('table-scroll-area').addEventListener('scroll',function(){
-  document.getElementById('report-thead').classList.toggle('scrolled-past',this.scrollTop>0);
-});
-
+document.getElementById('table-scroll-area').addEventListener('scroll', function(){ document.getElementById('report-thead').classList.toggle('scrolled-past', this.scrollTop > 0); });
 buildTabList();
 </script>
 </body>
