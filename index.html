@@ -36,7 +36,7 @@
   .clickable:hover { background: #fff3cd; outline: 1px solid #e6a817; }
   .clickable.active { background: #d0e8ff; outline: 1px solid #0056b3; }
   .clickable:focus { outline: 2px solid #0056b3; outline-offset: 1px; background: #e8f4ff; }
-  td.acct-desc-clickable { cursor: pointer; text-decoration: underline dotted #0056b3; color: #003087; transition: background 0.12s; }
+  td.acct-desc-clickable { cursor: pointer; text-decoration: underline dotted #999; color: #111; transition: background 0.12s; }
   td.acct-desc-clickable:hover { background: #fff3cd; }
   td.acct-desc-clickable.active { background: #d0e8ff; outline: 1px solid #0056b3; }
   .table-wrapper { padding: 0 12px 8px; }
@@ -55,9 +55,11 @@
   .report-table thead tr.hdr-cols th.left { text-align: left; }
   .report-table tbody td { padding: 1px 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; vertical-align: top; }
   .report-table tbody td.r { text-align: right; }
-  .report-table tbody td.blue { text-align: right; color: #00419e; }
-  .report-table tbody td.neg { color: #cc0000; }
-  .report-table tbody td.rneg { text-align: right; color: #cc0000; }
+  .report-table tbody td.blue { text-align: right; color: #111; }
+  .report-table tbody td.blue.col-spent { color: #00419e; }
+  .report-table tbody td.blue-accrual { text-align: right; color: #00419e; }
+  .report-table tbody td.neg { color: #111; }
+  .report-table tbody td.rneg { text-align: right; color: #111; }
   .report-table tbody tr:hover td { background: #f6f6f6; }
   tr.total-row td { font-weight: bold; border-top: 1px solid #444; border-bottom: 2px solid #444; padding-top: 2px; padding-bottom: 2px; }
   tr.grand td { border-top: 2px double #111 !important; }
@@ -75,6 +77,25 @@
   .tip-badge.acct-badge { background: #1a5c1a; }
   .tip-badge.nav-badge { background: #6b2d8b; }
   .explain-section-body { font-size: 11px; color: #222; line-height: 1.6; }
+  .guide-pill-toggle {
+    display:inline-flex; align-items:center; gap:6px;
+    padding:4px 10px; border-radius:999px;
+    border:1px solid #b9c9e6; background:#fff; color:#003087;
+    font-size:9px; font-weight:bold; letter-spacing:.02em; cursor:pointer;
+    user-select:none; transition:all .15s ease; margin:4px 0;
+  }
+  .guide-pill-toggle:hover { border-color:#7aa6da; background:#f5f9ff; }
+  .guide-pill-toggle.open { background:#eaf3ff; border-color:#4f8fd6; color:#002b73; }
+  .guide-pill-caret { font-size:8px; line-height:1; }
+  .guide-pill-panel { display:none; margin-top:4px; }
+  .guide-pill-panel.open { display:block; }
+  .glossary-table { width:100%; border-collapse:collapse; font-size:9px; margin-bottom:4px; }
+  .glossary-table th { background:#003087; color:#fff; padding:2px 4px; text-align:left; font-size:8.5px; font-weight:bold; }
+  .glossary-table td { padding:2px 4px; border-bottom:1px solid #eee; vertical-align:top; line-height:1.4; }
+  .glossary-table tr:nth-child(even) td { background:#f5f7fc; }
+  .glossary-table td:first-child { font-weight:bold; color:#003087; white-space:nowrap; min-width:40px; }
+  .glossary-table td:nth-child(2) { color:#333; min-width:110px; }
+  .glossary-table td:nth-child(3) { color:#555; }
   .nat-acct-list { margin-top: 6px; font-size: 10px; color: #333; border-top: 1px solid #dde; padding-top: 6px; }
   .nat-acct-list .na-row { display: flex; gap: 6px; padding: 2px 0; border-bottom: 1px dotted #e0e0e0; }
   .nat-acct-list .na-code { font-weight: bold; color: #003087; min-width: 46px; flex-shrink: 0; font-size: 9.5px; }
@@ -87,6 +108,7 @@
   @keyframes hint-pulse { 0% { box-shadow: 0 0 0 0 rgba(0,48,135,0.5); } 70% { box-shadow: 0 0 0 6px rgba(0,48,135,0); } 100% { box-shadow: 0 0 0 0 rgba(0,48,135,0); } }
   .first-hint { animation: hint-pulse 1.4s ease 0.9s 2; border-radius: 2px; }
 
+  /* ── PILL BAR — sits inside the sticky thead row ── */
   .pill-bar {
     display: flex;
     align-items: center;
@@ -106,79 +128,40 @@
     display: inline-flex;
     align-items: center;
     gap: 5px;
-    padding: 3px 12px 3px 9px;
-    border-radius: 999px;
-    border: 1px solid #a9a9a9;
-    background: #f7f7f7;
+    padding: 3px 11px 3px 8px;
+    border-radius: 100px;
+    border: 1.5px solid #bbb;
+    background: #fff;
     font-size: 9.5px;
     font-weight: bold;
     cursor: pointer;
-    transition: background 0.12s ease, border-color 0.12s ease, box-shadow 0.12s ease;
+    transition: all 0.15s ease;
     user-select: none;
-    color: #333;
+    color: #444;
     letter-spacing: 0.01em;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.85);
   }
   .pill-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-  .pill:hover { border-color: #666; color: #111; }
-  .question-selector {
-    max-height: 0;
-    opacity: 0;
-    overflow: hidden;
-    padding: 0 0;
-    border-top: 0;
-    border-bottom: 0;
-    background: #efefef;
-    transition: max-height 0.22s ease, opacity 0.16s ease, padding 0.16s ease, border-width 0.16s ease;
-  }
-  .question-selector.visible {
-    max-height: 46px;
-    opacity: 1;
-    padding: 6px 0 6px;
-    border-top: 1px solid #bdbdbd;
-    border-bottom: 1px solid #d2d2d2;
-  }
-  .question-selector-inner {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 0 12px;
-  }
-  .question-selector-label {
-    font-size: 8.5px;
-    font-weight: bold;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: #9a8f7a;
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-  .pill-row {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    flex-wrap: nowrap;
-  }
-  .pill.pill-focus {
-    outline: 1px solid #7f7f7f;
-    outline-offset: 0;
-    box-shadow: 0 0 0 2px rgba(140,140,140,0.12);
-  }
+  .pill:hover { border-color: #555; color: #111; }
 
-  .pill[data-pill="budget"] .pill-dot { background: #4d8ea5; }
-  .pill[data-pill="budget"].pill-on   { background: #f7f7f7; border-color: #7f7f7f; color: #222; }
+  /* Budget pill — teal */
+  .pill[data-pill="budget"] .pill-dot { background: #0e7490; }
+  .pill[data-pill="budget"].pill-on   { background: #d0f0f8; border-color: #0e7490; color: #0a5c6e; }
 
-  .pill[data-pill="spent"] .pill-dot  { background: #d38a2c; }
-  .pill[data-pill="spent"].pill-on    { background: #f7f7f7; border-color: #7f7f7f; color: #222; }
+  /* Spent pill — amber */
+  .pill[data-pill="spent"] .pill-dot  { background: #c97b00; }
+  .pill[data-pill="spent"].pill-on    { background: #fff3d6; border-color: #8a4b00; color: #8a4b00; }
 
-  .pill[data-pill="left"] .pill-dot   { background: #5a9a45; }
-  .pill[data-pill="left"].pill-on     { background: #f7f7f7; border-color: #7f7f7f; color: #222; }
+  /* Left pill — green */
+  .pill[data-pill="left"] .pill-dot   { background: #2a8a2a; }
+  .pill[data-pill="left"].pill-on     { background: #dff5df; border-color: #1a5c1a; color: #1a5c1a; }
 
+  /* ── S4-STYLE HIGHLIGHT ENGINE ── */
   @keyframes hlShimmer { 0%{background-position:-200% center,0 0} 100%{background-position:300% center,0 0} }
   @keyframes hlBeat    { 0%,100%{filter:brightness(1)} 45%{filter:brightness(1.28)} }
   @keyframes hlIn      { from{opacity:0;transform:translateX(4px)} to{opacity:1;transform:translateX(0)} }
   @keyframes glowBreathe { 0%,100%{opacity:.45} 50%{opacity:1} }
 
+  /* highlighted header */
   th.hl-hdr {
     position:relative !important; overflow:hidden !important;
     background-image:
@@ -193,6 +176,7 @@
     border-bottom:3px solid var(--hl-strong) !important;
     color:var(--hl-text) !important;
   }
+  /* highlighted data cell */
   td.hl-cell {
     background:var(--hl-cell) !important;
     border-left:1px solid var(--hl-soft) !important;
@@ -201,8 +185,9 @@
     font-weight:700 !important;
     animation:hlBeat 2.8s ease-in-out infinite,hlIn .35s ease both !important;
   }
-  td.hl-cell.neg, td.hl-cell.rneg { color:#cc0000 !important; background:rgba(200,55,58,.07) !important; }
+  td.hl-cell.neg, td.hl-cell.rneg { color:#111 !important; background:rgba(200,55,58,.07) !important; }
 
+  /* glow overlay strip — positioned by JS */
   .hl-glow-strip {
     position:absolute; pointer-events:none; z-index:3; top:0;
     background:radial-gradient(ellipse 90% 55% at 50% 50%,
@@ -217,6 +202,7 @@
   .hl-glow-strip::before { left:0; }
   .hl-glow-strip::after  { right:0; }
 
+  /* table-wrapper needs relative so strips can be positioned inside it */
   .table-wrapper { position:relative; }
 </style>
 </head>
@@ -272,16 +258,6 @@
       </div>
     </div>
 
-    <div id="question-selector" class="question-selector" aria-hidden="true">
-      <div class="question-selector-inner">
-        <div class="question-selector-label">Jump to:</div>
-        <div class="pill-row">
-          <div class="pill" data-pill="budget" onclick="togglePill(this)"><span class="pill-dot"></span> What's my budget</div>
-          <div class="pill" data-pill="spent" onclick="togglePill(this)"><span class="pill-dot"></span> Spending to date</div>
-          <div class="pill" data-pill="left" onclick="togglePill(this)"><span class="pill-dot"></span> How much is left</div>
-        </div>
-      </div>
-    </div>
 
   </div>
 
@@ -307,14 +283,14 @@
     <thead id="report-thead">
       <tr class="hdr-group">
         <th colspan="2"></th>
-        <th></th>
+        <th></th><!-- budget header spacer -->
         <th colspan="4" class="hdr-actual-group clickable" tabindex="0" data-key="actual_to_date_group">Actual to Date (Does not include Accruals)</th>
         <th colspan="3" class="hdr-commit-group clickable" tabindex="0" data-key="commitment_group">Commitment</th>
         <th></th><th></th><th></th><th></th>
       </tr>
       <tr class="hdr-cols">
-        <th class="left">Account</th>
-        <th class="left">Account Description</th>
+        <th class="left clickable" tabindex="0" data-key="col_account">Account</th>
+        <th class="left clickable" tabindex="0" data-key="col_account_desc">Account Description</th>
         <th class="right clickable first-hint col-budget" tabindex="0" data-key="project_budget">Project Budget</th>
         <th class="right clickable col-spent" tabindex="0" data-key="month_actuals">Month Actuals</th>
         <th class="right clickable col-spent" tabindex="0" data-key="fiscal_year_to_date">Fiscal Year to Date</th>
@@ -330,27 +306,27 @@
       </tr>
     </thead>
     <tbody>
-<tr><td>50000</td><td class="acct-desc-clickable" data-acct="50000" tabindex="0">SALARY AND WAGES</td><td class="r col-budget">5,840,000.00</td><td class="blue col-spent">182,440.15</td><td class="blue col-spent">1,384,210.44</td><td class="blue col-spent">4,372,610.22</td><td class="r">1,467,389.78</td><td class="blue">312,840.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="r">4,685,450.22</td><td class="r col-left">1,154,549.78</td><td class="r">80%</td><td class="r">84%</td></tr>
-<tr><td>59000</td><td class="acct-desc-clickable" data-acct="59000" tabindex="0">FRINGE BENEFIT CHARGE</td><td class="r col-budget">1,460,000.00</td><td class="blue col-spent">46,910.33</td><td class="blue col-spent">347,830.18</td><td class="blue col-spent">1,093,152.44</td><td class="r">366,847.56</td><td class="blue">78,210.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="r">1,171,362.44</td><td class="r col-left">288,637.56</td><td class="r">80%</td><td class="r">85%</td></tr>
-<tr><td>61000</td><td class="acct-desc-clickable" data-acct="61000" tabindex="0">FINANCIAL AID</td><td class="r col-budget">12,000.00</td><td class="blue col-spent">0.00</td><td class="blue col-spent">0.00</td><td class="blue col-spent">0.00</td><td class="r">12,000.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="r">0.00</td><td class="r col-left">12,000.00</td><td class="r">0%</td><td class="r">0%</td></tr>
-<tr><td>61100</td><td class="acct-desc-clickable" data-acct="61100" tabindex="0">NONTUITION FINANCIAL AID</td><td class="r col-budget">52,000.00</td><td class="blue col-spent">0.00</td><td class="blue col-spent">26,000.00</td><td class="blue col-spent">39,200.00</td><td class="r">12,800.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="r">39,200.00</td><td class="r col-left">12,800.00</td><td class="r">75%</td><td class="r">75%</td></tr>
-<tr><td>61151</td><td class="acct-desc-clickable" data-acct="61151" tabindex="0">GRA TUITION</td><td class="r col-budget">510,000.00</td><td class="blue col-spent">0.00</td><td class="blue col-spent">158,600.00</td><td class="blue col-spent">382,800.00</td><td class="r">127,200.00</td><td class="blue">76,500.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="r">459,300.00</td><td class="r col-left">50,700.00</td><td class="r">90%</td><td class="r">95%</td></tr>
-<tr><td>61400</td><td class="acct-desc-clickable" data-acct="61400" tabindex="0">SUPPLIES AND MATERIALS</td><td class="r col-budget">118,000.00</td><td class="blue col-spent">3,240.18</td><td class="blue col-spent">12,450.72</td><td class="blue col-spent">88,630.44</td><td class="r">29,369.56</td><td class="blue">0.00</td><td class="blue">4,200.00</td><td class="blue">0.00</td><td class="r">92,830.44</td><td class="r col-left">25,169.56</td><td class="r">79%</td><td class="r">78%</td></tr>
-<tr><td>61900</td><td class="acct-desc-clickable" data-acct="61900" tabindex="0">MINOR EQUIPMENT</td><td class="r col-budget">0.00</td><td class="blue col-spent">2,650.00</td><td class="blue col-spent">2,650.00</td><td class="blue col-spent">2,650.00</td><td class="rneg">(2,650.00)</td><td class="blue">2,750.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="r">5,400.00</td><td class="rneg col-left">(5,400.00)</td><td class="r">N/A</td><td class="r">N/A</td></tr>
-<tr><td>62000</td><td class="acct-desc-clickable" data-acct="62000" tabindex="0">PUBLICATIONS</td><td class="r col-budget">16,200.00</td><td class="blue col-spent">168.50</td><td class="blue col-spent">1,840.00</td><td class="blue col-spent">8,125.00</td><td class="r">8,075.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="r">8,125.00</td><td class="r col-left">8,075.00</td><td class="r">50%</td><td class="r">52%</td></tr>
-<tr><td>63000</td><td class="acct-desc-clickable" data-acct="63000" tabindex="0">RENTALS</td><td class="r col-budget">0.00</td><td class="blue col-spent">1,440.00</td><td class="blue col-spent">10,080.00</td><td class="blue col-spent">9,840.00</td><td class="rneg">(9,840.00)</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="blue">13,500.00</td><td class="r">23,340.00</td><td class="rneg col-left">(23,340.00)</td><td class="r">N/A</td><td class="r">N/A</td></tr>
-<tr><td>63200</td><td class="acct-desc-clickable" data-acct="63200" tabindex="0">COMPUTER SERVICES</td><td class="r col-budget">88,000.00</td><td class="blue col-spent">0.00</td><td class="blue col-spent">19,400.00</td><td class="blue col-spent">51,200.00</td><td class="r">36,800.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="r">51,200.00</td><td class="r col-left">36,800.00</td><td class="r">58%</td><td class="r">55%</td></tr>
-<tr><td>63400</td><td class="acct-desc-clickable" data-acct="63400" tabindex="0">COMMUNICATIONS</td><td class="r col-budget">0.00</td><td class="blue col-spent">0.00</td><td class="blue col-spent">0.00</td><td class="blue col-spent">12.50</td><td class="rneg">(12.50)</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="r">12.50</td><td class="rneg col-left">(12.50)</td><td class="r">N/A</td><td class="r">N/A</td></tr>
-<tr><td>64000</td><td class="acct-desc-clickable" data-acct="64000" tabindex="0">SERVICES</td><td class="r col-budget">652,000.00</td><td class="blue col-spent">2,600.35</td><td class="blue col-spent">35,120.00</td><td class="blue col-spent">326,480.00</td><td class="r">325,520.00</td><td class="blue">0.00</td><td class="blue neg">(8,940.50)</td><td class="blue">0.00</td><td class="r">317,539.50</td><td class="r col-left">334,460.50</td><td class="r">49%</td><td class="r">50%</td></tr>
-<tr><td>64500</td><td class="acct-desc-clickable" data-acct="64500" tabindex="0">CONSULTANTS</td><td class="r col-budget">245,000.00</td><td class="blue col-spent">0.00</td><td class="blue col-spent">490,000.00</td><td class="blue col-spent">490,000.00</td><td class="rneg">(245,000.00)</td><td class="blue">490,000.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="r">980,000.00</td><td class="rneg col-left">(735,000.00)</td><td class="r">N/A</td><td class="r">N/A</td></tr>
-<tr><td>65000</td><td class="acct-desc-clickable" data-acct="65000" tabindex="0">SUBCONTRACTS</td><td class="r col-budget">5,480,000.00</td><td class="blue col-spent">825,600.44</td><td class="blue col-spent">1,318,440.22</td><td class="blue col-spent">3,448,720.18</td><td class="r">2,031,279.82</td><td class="blue">1,980,310.00</td><td class="blue">0.00</td><td class="blue">56,820.00</td><td class="r">5,485,850.18</td><td class="rneg col-left">(5,850.18)</td><td class="r">100%</td><td class="r">105%</td></tr>
-<tr><td>65200</td><td class="acct-desc-clickable" data-acct="65200" tabindex="0">DOMESTIC TRAVEL</td><td class="r col-budget">248,000.00</td><td class="blue col-spent">2,960.14</td><td class="blue col-spent">51,440.00</td><td class="blue col-spent">88,140.00</td><td class="r">159,860.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="r">88,140.00</td><td class="r col-left">159,860.00</td><td class="r">36%</td><td class="r">38%</td></tr>
-<tr><td>65300</td><td class="acct-desc-clickable" data-acct="65300" tabindex="0">INTERNATIONAL TRAVEL</td><td class="r col-budget">0.00</td><td class="blue col-spent">0.00</td><td class="blue col-spent">6,920.00</td><td class="blue col-spent">6,920.00</td><td class="rneg">(6,920.00)</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="r">6,920.00</td><td class="rneg col-left">(6,920.00)</td><td class="r">N/A</td><td class="r">N/A</td></tr>
-<tr><td>65600</td><td class="acct-desc-clickable" data-acct="65600" tabindex="0">ANIMAL CARE</td><td class="r col-budget">0.00</td><td class="blue col-spent">0.00</td><td class="blue col-spent">0.00</td><td class="blue col-spent">740.00</td><td class="rneg">(740.00)</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="r">740.00</td><td class="rneg col-left">(740.00)</td><td class="r">N/A</td><td class="r">N/A</td></tr>
-<tr><td>66000</td><td class="acct-desc-clickable" data-acct="66000" tabindex="0">OTHER EXPENSES</td><td class="r col-budget">0.00</td><td class="blue col-spent">470.22</td><td class="blue col-spent">29,460.00</td><td class="blue col-spent">30,810.44</td><td class="rneg">(30,810.44)</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="r">30,810.44</td><td class="rneg col-left">(30,810.44)</td><td class="r">N/A</td><td class="r">N/A</td></tr>
+<tr><td>50000</td><td class="acct-desc-clickable" data-acct="50000" tabindex="0">SALARY AND WAGES</td><td class="r col-budget">5,840,000.00</td><td class="blue col-spent">182,440.15</td><td class="blue col-spent">1,384,210.44</td><td class="blue col-spent">4,372,610.22</td><td class="r">1,467,389.78</td><td class="blue">312,840.00</td><td class="blue">0.00</td><td class="blue-accrual">0.00</td><td class="r">4,685,450.22</td><td class="r col-left">1,154,549.78</td><td class="r">80%</td><td class="r">84%</td></tr>
+<tr><td>59000</td><td class="acct-desc-clickable" data-acct="59000" tabindex="0">FRINGE BENEFIT CHARGE</td><td class="r col-budget">1,460,000.00</td><td class="blue col-spent">46,910.33</td><td class="blue col-spent">347,830.18</td><td class="blue col-spent">1,093,152.44</td><td class="r">366,847.56</td><td class="blue">78,210.00</td><td class="blue">0.00</td><td class="blue-accrual">0.00</td><td class="r">1,171,362.44</td><td class="r col-left">288,637.56</td><td class="r">80%</td><td class="r">85%</td></tr>
+<tr><td>61000</td><td class="acct-desc-clickable" data-acct="61000" tabindex="0">FINANCIAL AID</td><td class="r col-budget">12,000.00</td><td class="blue col-spent">0.00</td><td class="blue col-spent">0.00</td><td class="blue col-spent">0.00</td><td class="r">12,000.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="blue-accrual">0.00</td><td class="r">0.00</td><td class="r col-left">12,000.00</td><td class="r">0%</td><td class="r">0%</td></tr>
+<tr><td>61100</td><td class="acct-desc-clickable" data-acct="61100" tabindex="0">NONTUITION FINANCIAL AID</td><td class="r col-budget">52,000.00</td><td class="blue col-spent">0.00</td><td class="blue col-spent">26,000.00</td><td class="blue col-spent">39,200.00</td><td class="r">12,800.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="blue-accrual">0.00</td><td class="r">39,200.00</td><td class="r col-left">12,800.00</td><td class="r">75%</td><td class="r">75%</td></tr>
+<tr><td>61151</td><td class="acct-desc-clickable" data-acct="61151" tabindex="0">GRA TUITION</td><td class="r col-budget">510,000.00</td><td class="blue col-spent">0.00</td><td class="blue col-spent">158,600.00</td><td class="blue col-spent">382,800.00</td><td class="r">127,200.00</td><td class="blue">76,500.00</td><td class="blue">0.00</td><td class="blue-accrual">0.00</td><td class="r">459,300.00</td><td class="r col-left">50,700.00</td><td class="r">90%</td><td class="r">95%</td></tr>
+<tr><td>61400</td><td class="acct-desc-clickable" data-acct="61400" tabindex="0">SUPPLIES AND MATERIALS</td><td class="r col-budget">118,000.00</td><td class="blue col-spent">3,240.18</td><td class="blue col-spent">12,450.72</td><td class="blue col-spent">88,630.44</td><td class="r">29,369.56</td><td class="blue">0.00</td><td class="blue">4,200.00</td><td class="blue-accrual">0.00</td><td class="r">92,830.44</td><td class="r col-left">25,169.56</td><td class="r">79%</td><td class="r">78%</td></tr>
+<tr><td>61900</td><td class="acct-desc-clickable" data-acct="61900" tabindex="0">MINOR EQUIPMENT</td><td class="r col-budget">0.00</td><td class="blue col-spent">2,650.00</td><td class="blue col-spent">2,650.00</td><td class="blue col-spent">2,650.00</td><td class="rneg">(2,650.00)</td><td class="blue">2,750.00</td><td class="blue">0.00</td><td class="blue-accrual">0.00</td><td class="r">5,400.00</td><td class="rneg col-left">(5,400.00)</td><td class="r">N/A</td><td class="r">N/A</td></tr>
+<tr><td>62000</td><td class="acct-desc-clickable" data-acct="62000" tabindex="0">PUBLICATIONS</td><td class="r col-budget">16,200.00</td><td class="blue col-spent">168.50</td><td class="blue col-spent">1,840.00</td><td class="blue col-spent">8,125.00</td><td class="r">8,075.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="blue-accrual">0.00</td><td class="r">8,125.00</td><td class="r col-left">8,075.00</td><td class="r">50%</td><td class="r">52%</td></tr>
+<tr><td>63000</td><td class="acct-desc-clickable" data-acct="63000" tabindex="0">RENTALS</td><td class="r col-budget">0.00</td><td class="blue col-spent">1,440.00</td><td class="blue col-spent">10,080.00</td><td class="blue col-spent">9,840.00</td><td class="rneg">(9,840.00)</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="blue-accrual">13,500.00</td><td class="r">23,340.00</td><td class="rneg col-left">(23,340.00)</td><td class="r">N/A</td><td class="r">N/A</td></tr>
+<tr><td>63200</td><td class="acct-desc-clickable" data-acct="63200" tabindex="0">COMPUTER SERVICES</td><td class="r col-budget">88,000.00</td><td class="blue col-spent">0.00</td><td class="blue col-spent">19,400.00</td><td class="blue col-spent">51,200.00</td><td class="r">36,800.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="blue-accrual">0.00</td><td class="r">51,200.00</td><td class="r col-left">36,800.00</td><td class="r">58%</td><td class="r">55%</td></tr>
+<tr><td>63400</td><td class="acct-desc-clickable" data-acct="63400" tabindex="0">COMMUNICATIONS</td><td class="r col-budget">0.00</td><td class="blue col-spent">0.00</td><td class="blue col-spent">0.00</td><td class="blue col-spent">12.50</td><td class="rneg">(12.50)</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="blue-accrual">0.00</td><td class="r">12.50</td><td class="rneg col-left">(12.50)</td><td class="r">N/A</td><td class="r">N/A</td></tr>
+<tr><td>64000</td><td class="acct-desc-clickable" data-acct="64000" tabindex="0">SERVICES</td><td class="r col-budget">652,000.00</td><td class="blue col-spent">2,600.35</td><td class="blue col-spent">35,120.00</td><td class="blue col-spent">326,480.00</td><td class="r">325,520.00</td><td class="blue">0.00</td><td class="blue">8,940.50</td><td class="blue-accrual">0.00</td><td class="r">317,539.50</td><td class="r col-left">334,460.50</td><td class="r">49%</td><td class="r">50%</td></tr>
+<tr><td>64500</td><td class="acct-desc-clickable" data-acct="64500" tabindex="0">CONSULTANTS</td><td class="r col-budget">245,000.00</td><td class="blue col-spent">0.00</td><td class="blue col-spent">490,000.00</td><td class="blue col-spent">490,000.00</td><td class="rneg">(245,000.00)</td><td class="blue">490,000.00</td><td class="blue">0.00</td><td class="blue-accrual">0.00</td><td class="r">980,000.00</td><td class="rneg col-left">(735,000.00)</td><td class="r">N/A</td><td class="r">N/A</td></tr>
+<tr><td>65000</td><td class="acct-desc-clickable" data-acct="65000" tabindex="0">SUBCONTRACTS</td><td class="r col-budget">5,480,000.00</td><td class="blue col-spent">825,600.44</td><td class="blue col-spent">1,318,440.22</td><td class="blue col-spent">3,448,720.18</td><td class="r">2,031,279.82</td><td class="blue">1,980,310.00</td><td class="blue">0.00</td><td class="blue-accrual">56,820.00</td><td class="r">5,485,850.18</td><td class="rneg col-left">(5,850.18)</td><td class="r">100%</td><td class="r">105%</td></tr>
+<tr><td>65200</td><td class="acct-desc-clickable" data-acct="65200" tabindex="0">DOMESTIC TRAVEL</td><td class="r col-budget">248,000.00</td><td class="blue col-spent">2,960.14</td><td class="blue col-spent">51,440.00</td><td class="blue col-spent">88,140.00</td><td class="r">159,860.00</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="blue-accrual">0.00</td><td class="r">88,140.00</td><td class="r col-left">159,860.00</td><td class="r">36%</td><td class="r">38%</td></tr>
+<tr><td>65300</td><td class="acct-desc-clickable" data-acct="65300" tabindex="0">INTERNATIONAL TRAVEL</td><td class="r col-budget">0.00</td><td class="blue col-spent">0.00</td><td class="blue col-spent">6,920.00</td><td class="blue col-spent">6,920.00</td><td class="rneg">(6,920.00)</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="blue-accrual">0.00</td><td class="r">6,920.00</td><td class="rneg col-left">(6,920.00)</td><td class="r">N/A</td><td class="r">N/A</td></tr>
+<tr><td>65600</td><td class="acct-desc-clickable" data-acct="65600" tabindex="0">ANIMAL CARE</td><td class="r col-budget">0.00</td><td class="blue col-spent">0.00</td><td class="blue col-spent">0.00</td><td class="blue col-spent">740.00</td><td class="rneg">(740.00)</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="blue-accrual">0.00</td><td class="r">740.00</td><td class="rneg col-left">(740.00)</td><td class="r">N/A</td><td class="r">N/A</td></tr>
+<tr><td>66000</td><td class="acct-desc-clickable" data-acct="66000" tabindex="0">OTHER EXPENSES</td><td class="r col-budget">0.00</td><td class="blue col-spent">470.22</td><td class="blue col-spent">29,460.00</td><td class="blue col-spent">30,810.44</td><td class="rneg">(30,810.44)</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="blue-accrual">0.00</td><td class="r">30,810.44</td><td class="rneg col-left">(30,810.44)</td><td class="r">N/A</td><td class="r">N/A</td></tr>
 <tr class="total-row clickable" tabindex="0" data-key="total_direct_expense"><td colspan="2">Total Direct Expense</td><td class="r col-budget">15,721,200.00</td><td class="r col-spent">1,070,629.31</td><td class="r col-spent">3,893,031.56</td><td class="r col-spent">10,440,630.22</td><td class="r">5,280,569.78</td><td class="r">2,860,610.00</td><td class="r">(4,740.50)</td><td class="r">70,320.00</td><td class="r">13,366,819.72</td><td class="r col-left">2,354,380.28</td><td class="r">85%</td><td class="r">89%</td></tr>
 <tr class="spacer"><td colspan="14"></td></tr>
-<tr><td>69800</td><td class="acct-desc-clickable" data-acct="69800" tabindex="0">F&amp;A DEDUCTION</td><td class="r col-budget">4,278,800.00</td><td class="blue col-spent">299,776.21</td><td class="blue col-spent">1,089,848.84</td><td class="blue col-spent">2,923,376.46</td><td class="r">1,355,423.54</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="blue">1,882.00</td><td class="r">2,925,258.46</td><td class="r col-left">1,353,541.54</td><td class="r">68%</td><td class="r">72%</td></tr>
+<tr><td>69800</td><td class="acct-desc-clickable" data-acct="69800" tabindex="0">F&amp;A DEDUCTION</td><td class="r col-budget">4,278,800.00</td><td class="blue col-spent">299,776.21</td><td class="blue col-spent">1,089,848.84</td><td class="blue col-spent">2,923,376.46</td><td class="r">1,355,423.54</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="blue-accrual">1,882.00</td><td class="r">2,925,258.46</td><td class="r col-left">1,353,541.54</td><td class="r">68%</td><td class="r">72%</td></tr>
 <tr class="total-row clickable" tabindex="0" data-key="total_fa_expense"><td colspan="2">Total F&amp;A Expense</td><td class="r col-budget">4,278,800.00</td><td class="r col-spent">299,776.21</td><td class="r col-spent">1,089,848.84</td><td class="r col-spent">2,923,376.46</td><td class="r">1,355,423.54</td><td class="r">0.00</td><td class="r">0.00</td><td class="r">1,882.00</td><td class="r">2,925,258.46</td><td class="r col-left">1,353,541.54</td><td class="r">68%</td><td class="r">72%</td></tr>
 <tr class="spacer"><td colspan="14"></td></tr>
 <tr class="total-row grand clickable" tabindex="0" data-key="total_expense"><td colspan="2">Total Expense</td><td class="r col-budget">20,000,000.00</td><td class="r col-spent">1,370,405.52</td><td class="r col-spent">4,982,880.40</td><td class="r col-spent">13,364,006.68</td><td class="r">6,635,993.32</td><td class="r">2,860,610.00</td><td class="r">(4,740.50)</td><td class="r">72,202.00</td><td class="r">16,292,078.18</td><td class="r col-left">3,707,921.82</td><td class="r">81%</td><td class="r">86%</td></tr>
@@ -378,126 +354,151 @@
 <div class="tab-counter" id="tab-counter"></div>
 
 <script>
+// ── S4-STYLE HIGHLIGHT ENGINE ──
 var activePill = null;
-var pillNavActive = false;
-var pillOrder = ['budget','spent','left'];
-var pillFocusIndex = 0;
+
+// Config per pill: which col-* classes to target, and color tokens
 var PILL_CFG = {
-  budget: { colClass: 'col-budget', text: '#0a5c6e', line: 'rgba(14,116,144,.38)', strong: 'rgba(14,116,144,.72)', soft: 'rgba(14,116,144,.18)', fill: 'rgba(14,116,144,.04)', cell: 'rgba(14,116,144,.025)', rCenter:'rgba(14,116,144,.04)', rMid: 'rgba(14,116,144,.015)', edge: 'rgba(14,116,144,.55)' },
-  spent:  { colClass: 'col-spent',  text: '#6b3800', line: 'rgba(180,100,0,.38)', strong: 'rgba(180,100,0,.72)', soft: 'rgba(180,100,0,.18)', fill: 'rgba(196,167,71,.05)', cell: 'rgba(196,167,71,.03)', rCenter:'rgba(196,167,71,.05)', rMid: 'rgba(196,167,71,.015)', edge: 'rgba(180,100,0,.55)' },
-  left:   { colClass: 'col-left',   text: '#1a5c1a', line: 'rgba(42,140,92,.38)', strong: 'rgba(42,140,92,.72)', soft: 'rgba(42,140,92,.18)', fill: 'rgba(42,140,92,.04)', cell: 'rgba(42,140,92,.025)', rCenter:'rgba(42,140,92,.04)', rMid: 'rgba(42,140,92,.015)', edge: 'rgba(42,140,92,.55)' }
+  budget: {
+    colClass: 'col-budget',
+    text:   '#0a5c6e',
+    line:   'rgba(14,116,144,.38)',    // border lines — unchanged
+    strong: 'rgba(14,116,144,.72)',    // bottom border — unchanged
+    soft:   'rgba(14,116,144,.18)',    // cell side borders — unchanged
+    fill:   'rgba(14,116,144,.04)',    // header shimmer tint — lighter
+    cell:   'rgba(14,116,144,.025)',   // cell background — much lighter
+    rCenter:'rgba(14,116,144,.04)',    // radial glow center — much lighter
+    rMid:   'rgba(14,116,144,.015)',   // radial glow mid — near invisible
+    edge:   'rgba(14,116,144,.55)'     // edge bars — unchanged
+  },
+  spent: {
+    colClass: 'col-spent',
+    text:   '#6b3800',
+    line:   'rgba(180,100,0,.38)',
+    strong: 'rgba(180,100,0,.72)',
+    soft:   'rgba(180,100,0,.18)',
+    fill:   'rgba(196,167,71,.05)',
+    cell:   'rgba(196,167,71,.03)',
+    rCenter:'rgba(196,167,71,.05)',
+    rMid:   'rgba(196,167,71,.015)',
+    edge:   'rgba(180,100,0,.55)'
+  },
+  left: {
+    colClass: 'col-left',
+    text:   '#1a5c1a',
+    line:   'rgba(42,140,92,.38)',
+    strong: 'rgba(42,140,92,.72)',
+    soft:   'rgba(42,140,92,.18)',
+    fill:   'rgba(42,140,92,.04)',
+    cell:   'rgba(42,140,92,.025)',
+    rCenter:'rgba(42,140,92,.04)',
+    rMid:   'rgba(42,140,92,.015)',
+    edge:   'rgba(42,140,92,.55)'
+  }
 };
+
+// All glow strip elements (created once, reused)
 var glowStrips = [];
+
 function getTableWrapper() { return document.querySelector('.table-wrapper'); }
+
 function clearHighlights() {
-  document.querySelectorAll('.hl-hdr').forEach(function(el) { el.classList.remove('hl-hdr'); el.style.cssText = ''; });
-  document.querySelectorAll('.hl-cell').forEach(function(el) { el.classList.remove('hl-cell'); el.style.cssText = ''; });
+  // remove classes + CSS vars from all previously highlighted cells/headers
+  document.querySelectorAll('.hl-hdr').forEach(function(el) {
+    el.classList.remove('hl-hdr');
+    el.style.cssText = '';
+  });
+  document.querySelectorAll('.hl-cell').forEach(function(el) {
+    el.classList.remove('hl-cell');
+    el.style.cssText = '';
+  });
+  // remove glow strips
   glowStrips.forEach(function(s) { s.parentNode && s.parentNode.removeChild(s); });
   glowStrips = [];
 }
+
 function applyVars(el, cfg) {
-  el.style.setProperty('--hl-text', cfg.text);
-  el.style.setProperty('--hl-line', cfg.line);
+  el.style.setProperty('--hl-text',   cfg.text);
+  el.style.setProperty('--hl-line',   cfg.line);
   el.style.setProperty('--hl-strong', cfg.strong);
-  el.style.setProperty('--hl-soft', cfg.soft);
-  el.style.setProperty('--hl-fill', cfg.fill);
-  el.style.setProperty('--hl-cell', cfg.cell);
-  el.style.setProperty('--hl-edge', cfg.edge);
+  el.style.setProperty('--hl-soft',   cfg.soft);
+  el.style.setProperty('--hl-fill',   cfg.fill);
+  el.style.setProperty('--hl-cell',   cfg.cell);
+  el.style.setProperty('--hl-edge',   cfg.edge);
 }
+
 function positionGlowStrips(colClass, cfg) {
+  var table = document.getElementById('main-table');
   var wrapper = getTableWrapper();
   if (!wrapper) return;
   var wRect = wrapper.getBoundingClientRect();
   if (wRect.width === 0) { setTimeout(function(){ positionGlowStrips(colClass, cfg); }, 80); return; }
+
+  // find all th elements with this class to get column x positions
   var headers = document.querySelectorAll('th.' + colClass);
   headers.forEach(function(th) {
     var hRect = th.getBoundingClientRect();
+    var scrollArea = document.getElementById('table-scroll-area');
+    var scrollTop = scrollArea ? scrollArea.scrollTop : 0;
     var strip = document.createElement('div');
     strip.className = 'hl-glow-strip';
     strip.style.setProperty('--hl-radial-center', cfg.rCenter);
-    strip.style.setProperty('--hl-radial-mid', cfg.rMid);
-    strip.style.setProperty('--hl-edge', cfg.edge);
-    strip.style.left = (hRect.left - wRect.left) + 'px';
-    strip.style.width = hRect.width + 'px';
+    strip.style.setProperty('--hl-radial-mid',    cfg.rMid);
+    strip.style.setProperty('--hl-edge',          cfg.edge);
+    strip.style.left   = (hRect.left - wRect.left) + 'px';
+    strip.style.width  = hRect.width + 'px';
     strip.style.height = wrapper.scrollHeight + 'px';
-    strip.style.top = '0';
+    strip.style.top    = '0';
     wrapper.appendChild(strip);
     glowStrips.push(strip);
   });
 }
+
 function applyHighlight(pill) {
   var cfg = PILL_CFG[pill];
   if (!cfg) return;
   var colClass = cfg.colClass;
   var table = document.getElementById('main-table');
-  table.querySelectorAll('th.' + colClass).forEach(function(th) { th.classList.add('hl-hdr'); applyVars(th, cfg); });
-  table.querySelectorAll('td.' + colClass).forEach(function(td) { td.classList.add('hl-cell'); applyVars(td, cfg); });
+
+  // highlight header cells
+  table.querySelectorAll('th.' + colClass).forEach(function(th) {
+    th.classList.add('hl-hdr');
+    applyVars(th, cfg);
+  });
+
+  // highlight data cells
+  table.querySelectorAll('td.' + colClass).forEach(function(td) {
+    td.classList.add('hl-cell');
+    applyVars(td, cfg);
+  });
+
+  // overlay glow strips
   setTimeout(function() { positionGlowStrips(colClass, cfg); }, 60);
 }
-function getPillEl(pill) {
-  return document.querySelector('.pill[data-pill="' + pill + '"]');
-}
-function clearPillFocus() {
-  document.querySelectorAll('.pill').forEach(function(el) { el.classList.remove('pill-focus'); });
-}
-function setPillFocus(index) {
-  pillFocusIndex = (index + pillOrder.length) % pillOrder.length;
-  clearPillFocus();
-  var el = getPillEl(pillOrder[pillFocusIndex]);
-  if (el) el.classList.add('pill-focus');
-}
-function showQuestionSelector() {
-  var selector = document.getElementById('question-selector');
-  if (!selector) return;
-  selector.classList.add('visible');
-  selector.setAttribute('aria-hidden', 'false');
-}
-function hideQuestionSelector() {
-  var selector = document.getElementById('question-selector');
-  if (!selector) return;
-  selector.classList.remove('visible');
-  selector.setAttribute('aria-hidden', 'true');
-}
-function activatePillNav() {
-  pillNavActive = true;
-  showQuestionSelector();
-  pillFocusIndex = 0;
-  setPillFocus(pillFocusIndex);
-  var firstPill = getPillEl(pillOrder[pillFocusIndex]);
-  if (firstPill && activePill !== pillOrder[pillFocusIndex]) {
-    togglePill(firstPill);
-  }
-}
-function deactivatePillNav(clearActive) {
-  pillNavActive = false;
-  clearPillFocus();
-  if (clearActive && activePill) {
-    var activeEl = getPillEl(activePill);
-    if (activeEl) activeEl.classList.remove('pill-on');
-    clearHighlights();
-    activePill = null;
-  }
-  hideQuestionSelector();
-}
+
 function togglePill(el) {
   var p = el.getAttribute('data-pill');
+
   if (activePill === p) {
     el.classList.remove('pill-on');
     clearHighlights();
     activePill = null;
-    if (pillNavActive) setPillFocus(pillOrder.indexOf(p));
     return;
   }
+
+  // deactivate previous
   if (activePill) {
     var prev = document.querySelector('.pill[data-pill="' + activePill + '"]');
     if (prev) prev.classList.remove('pill-on');
     clearHighlights();
   }
+
   el.classList.add('pill-on');
   activePill = p;
   applyHighlight(p);
-  if (pillNavActive) setPillFocus(pillOrder.indexOf(p));
 }
+
+// reposition strips on scroll so they stay aligned
 var scrollArea = document.getElementById('table-scroll-area');
 if (scrollArea) {
   scrollArea.addEventListener('scroll', function() {
@@ -508,6 +509,8 @@ if (scrollArea) {
     }
   });
 }
+
+// ── EXISTING FIELD GUIDE LOGIC (unchanged) ──
 var ACCT = {
   "50000":{"label":"SALARY AND WAGES","definition":"Salary and wages for all employee types including faculty, researchers, staff, and students charged to this sponsored project. Typically the largest expense category on a research grant.","interpret":"Confirm only project-eligible personnel are charged. Each salary charge should correspond to an effort certification or appointment. Unexpected charges may indicate misallocation.","why":"Salary is the most scrutinized cost on sponsored awards. Auditors focus on whether effort charged matches effort actually performed.","naturalAccounts":[{"code":"50010","desc":"PROF (TENURED)","def":"Salary paid to tenured professors."},{"code":"50020","desc":"ASSOC PROF (TENURED)","def":"Salary paid to tenured associate professors."},{"code":"50100","desc":"PROF (NONTENURED)","def":"Salary paid to non-tenured professors."},{"code":"50120","desc":"ASST PROF","def":"Salary paid to assistant professors."},{"code":"50130","desc":"INSTRUCTOR (FT)","def":"Salary paid to full-time instructors."},{"code":"50510","desc":"TEACHING ASSISTANT","def":"Salary paid to teaching assistants."},{"code":"50530","desc":"TEACHING FELLOW","def":"Salary paid to teaching fellows."},{"code":"50540","desc":"RESEARCH FELLOW","def":"Salary paid to research fellows."},{"code":"52010","desc":"SR RESEARCH SCIENTIST","def":"Salary paid to senior research scientists."},{"code":"52030","desc":"RESEARCH SCIENTIST","def":"Salary paid to research scientists."},{"code":"52200","desc":"POSTDOC RESEARCH FELLOW (FT)","def":"Salary paid to full-time postdoctoral research fellows."},{"code":"52210","desc":"POSTDOC RESEARCH SCHOLAR (FT)","def":"Salary paid to full-time postdoctoral research scholars."},{"code":"52810","desc":"GRA (SUBJECT TO TUITION)","def":"Salary paid to graduate research assistants with tuition charged."},{"code":"52820","desc":"GRA (NO TUITION)","def":"Salary paid to graduate research assistants without tuition charged."},{"code":"53300","desc":"OFFICER OF ADMINISTRATION","def":"Salary paid to officers of administration."},{"code":"53330","desc":"MANAGER/DEPT ADMINISTRATOR","def":"Salary paid to managers or department administrators."},{"code":"53350","desc":"ADMINISTRATIVE PROFESSIONAL","def":"Salary paid to administrative professionals."},{"code":"53600","desc":"HOURLY PERSONNEL","def":"Wages paid to hourly employees."},{"code":"54400","desc":"STUDENTS - WORK STUDY","def":"Student wages funded by work-study programs."},{"code":"54420","desc":"STUDENTS-CASUAL (PT)","def":"Wages paid to part-time casual student workers."},{"code":"54600","desc":"UNION SUPPORT STAFF","def":"Salary paid to union support staff."},{"code":"54800","desc":"NONUNION-SUPPORT STAFF","def":"Salary paid to non-union support staff."},{"code":"54070","desc":"VACATION PAY","def":"Vacation pay expense or accrual."}]},
   "59000":{"label":"FRINGE BENEFIT CHARGE","definition":"Fringe benefit costs (health, retirement, FICA, disability, etc.) automatically calculated as a percentage of salary and charged alongside salary expenses.","interpret":"Fringe charges are system-generated based on employee type and salary. If salary is corrected, fringe follows. Review fringe rates by employee class if the total looks disproportionate.","why":"Fringe is a significant cost and subject to the same allowability rules as salary. Federal sponsors require approved, consistently applied rates.","naturalAccounts":[{"code":"59010","desc":"FRINGE BENEFIT CHARGE","def":"Fringe benefit costs charged to salary expenses."},{"code":"59020","desc":"FRINGE ADDITIONAL","def":"Additional fringe benefit charges."},{"code":"59025","desc":"FRINGE SPECIAL ADJUSTMENT","def":"Special adjustment to fringe benefits."},{"code":"59026","desc":"FRINGE RETURN OF SAVINGS","def":"Return of fringe savings or credit."},{"code":"59030","desc":"FRINGE STUDENTS","def":"Fringe benefit charges for student employees."},{"code":"59050","desc":"FRINGE A1 FICA","def":"Employer FICA fringe under A1 plan."},{"code":"60020","desc":"PREMIUMS","def":"Insurance premium payments."},{"code":"60060","desc":"GRADUATE HEALTH SUBSIDY","def":"Graduate health subsidy expense."},{"code":"60450","desc":"UNION BENEFITS","def":"Union benefit costs."},{"code":"60520","desc":"CHILDCARE BENEFIT","def":"Childcare benefit expense."}]},
@@ -529,6 +532,7 @@ var ACCT = {
   "66000":{"label":"OTHER EXPENSES","definition":"Miscellaneous project expenses not captured elsewhere.","interpret":"Charges against a zero budget. Other expenses are catch-all postings -- each transaction should be reviewed.","why":"Vague or miscellaneous categories are high-risk on sponsored awards.","naturalAccounts":[{"code":"66005","desc":"OTHER EXPENSES-GENERAL","def":"General other expense not categorized elsewhere."},{"code":"66040","desc":"RELOCATION AND MOVING COSTS","def":"Relocation and moving cost expense."}]},
   "69800":{"label":"F&A DEDUCTION","definition":"Facilities and Administrative (indirect) costs charged based on the negotiated F&A rate.","interpret":"F&A is system-calculated. The report footer warning is critical: F&A is not final until the month is closed.","why":"The F&A rate and base are approved by the federal government.","naturalAccounts":[{"code":"69810","desc":"F&A DEDUCTION GOVT ALLOCATION","def":"Allocation adjustment for government F&A deductions."},{"code":"69820","desc":"F&A DEDUCTION-GOVT MAN ADJ","def":"Manual adjustment for government F&A deductions."}]}
 };
+
 var FIELDS = {
   actual_to_date_group:{label:"Actual to Date (Does not include Accruals)",what:"The grouped section showing actual posted expenses only.",interpret:"Use this to understand what has hit the ledger as real expense activity.",why:"It isolates posted spending from pending obligations.",related:"Includes Month Actuals, Fiscal Year to Date, Project to Date, and Balance Before Commitment."},
   commitment_group:{label:"Commitment",what:"The grouped section showing funds spoken for but not yet fully posted as final expenses.",interpret:"These obligations reduce true available balance even if not yet in posted actuals.",why:"Without reviewing commitments, a project can appear healthier than it really is.",related:"Includes Encumbrance, Pre-Encumbrance, and Accruals or Open Vouchers."},
@@ -565,62 +569,33 @@ var FIELDS = {
   nav_sapos_only:{label:"SAPOs Only",what:"A filtered view that restricts results to Sponsored Awards Purchase Orders.",interpret:"Use it to isolate grant-funded procurement activity.",why:"It separates sponsored purchasing from non-sponsored activity.",related:"Useful with All Commitments and subcontract review."},
   nav_payroll_summary:{label:"Payroll Summary",what:"A linked report showing payroll charges to the project at a summarized level.",interpret:"Use it to confirm which employees had payroll charged in a given month.",why:"Salary is often the highest-value and most audited cost on a project.",related:"Compare totals here against Salary and Fringe on this report."},
   nav_payroll_detail:{label:"Payroll Detail",what:"A linked report showing payroll transactions at the most granular level.",interpret:"Use it to verify a specific charge or investigate an adjustment.",why:"It is the authoritative source for transaction-level payroll data.",related:"Companion to Payroll Summary."},
-  nav_next_period:{label:"Next Accounting Period",what:"A navigation link that advances the report forward by one accounting period.",interpret:"Use it to move forward in time and see how spending evolved.",why:"It supports trend analysis without rerunning the report.",related:"Works in tandem with Previous Accounting Period."}
+  nav_next_period:{label:"Next Accounting Period",what:"A navigation link that advances the report forward by one accounting period.",interpret:"Use it to move forward in time and see how spending evolved.",why:"It supports trend analysis without rerunning the report.",related:"Works in tandem with Previous Accounting Period."},
+  col_account:{label:"Account (Natural Account)",what:"The Account identifies what was purchased, paid, charged, or recorded. It is the natural classification of the transaction.",interpret:"Use Account to determine what kind of transaction you are looking at. This is often the fastest way to group activity, spot unusual spending patterns, and identify miscoding. For analysis, scan for accounts that do not fit the business purpose, time of year, or funding source.",related:"Use with Account Description, Amount, Department, and Project to understand both the nature of the spend and where it belongs.",glossary:`<div class="guide-pill-group" style="margin-top:6px;"><button type="button" class="guide-pill-toggle" data-guide-target="spfr-acct-common"><span>Common accounts</span><span class="guide-pill-caret">▾</span></button><div class="guide-pill-panel" id="spfr-acct-common"><table class="glossary-table" style="margin-top:6px;"><tr><th>Account</th><th>Account Description</th><th>Definition</th></tr><tr><td>61500</td><td>LAB SUPPLIES - GENERAL</td><td>Money spent on everyday laboratory supplies used for experiments or research.</td></tr><tr><td>61410</td><td>OFFICE SUPPLIES - GENERAL</td><td>Basic office supplies such as paper, pens, folders, or printer supplies.</td></tr><tr><td>65210</td><td>DOMESTIC TRANSPORTATION</td><td>Travel within the country such as taxis, trains, or rideshare.</td></tr><tr><td>65220</td><td>DOMESTIC MEALS</td><td>Meals purchased during business travel within the country.</td></tr><tr><td>65230</td><td>DOMESTIC LODGING</td><td>Hotel expenses during domestic business travel.</td></tr><tr><td>61405</td><td>SUPPLIES AND MATERIALS - GENERAL</td><td>General supplies used for office work, research, or operations.</td></tr><tr><td>64350</td><td>MEETINGS AND EVENTS</td><td>Costs for hosting meetings, seminars, workshops, or events.</td></tr><tr><td>65310</td><td>INTERNATIONAL TRANSPORTATION</td><td>Airfare or travel costs for trips outside the country.</td></tr><tr><td>66475</td><td>TRAVEL - SEGREGATED</td><td>Travel expenses kept separate for special tracking or reporting.</td></tr><tr><td>53300</td><td>OFFICER OF ADMIN</td><td>Salaries paid to Officers of Administration.</td></tr></table></div></div><div class="guide-pill-group" style="margin-top:4px;"><button type="button" class="guide-pill-toggle" data-guide-target="spfr-acct-more"><span>Show more common accounts</span><span class="guide-pill-caret">▾</span></button><div class="guide-pill-panel" id="spfr-acct-more"><table class="glossary-table" style="margin-top:6px;"><tr><th>Account</th><th>Account Description</th><th>Definition</th></tr><tr><td>52810</td><td>GRA (SUBJECT TO TUITION)</td><td>Salary or stipend paid to a Graduate Research Assistant whose tuition is also charged to the project or department.</td></tr><tr><td>54410</td><td>STUDENT CASUALS (FT)</td><td>Wages paid to full-time student employees working temporary or hourly jobs.</td></tr><tr><td>64005</td><td>SERVICES - GENERAL</td><td>Payments for general services performed by vendors.</td></tr><tr><td>65020</td><td>SUBCONTRACTS OUT OF MTDC</td><td>Payments to other institutions working on a sponsored research project.</td></tr><tr><td>64505</td><td>CONSULTANTS - GENERAL</td><td>Payments made to outside experts hired to provide advice or specialized professional services.</td></tr><tr><td>64540</td><td>MARKETING CONSULTANTS</td><td>Payments to consultants who help with marketing strategy, branding, communications, or promotion.</td></tr><tr><td>64305</td><td>PHOTOGRAPHIC SERVICE</td><td>Payments for professional photography services, such as event photos or marketing images.</td></tr><tr><td>61010</td><td>UNDERGRAD TUITION, FEES, ROOM</td><td>Charges related to undergraduate student tuition and housing.</td></tr><tr><td>64110</td><td>LAB SERVICES</td><td>Payments for laboratory testing or services performed by others.</td></tr><tr><td>65330</td><td>INTERNATIONAL LODGING</td><td>Hotel expenses during international business travel.</td></tr><tr><td>61690</td><td>FOOD - STAFF &amp; FACULTY</td><td>Food purchased for staff or faculty meetings or work events.</td></tr><tr><td>65320</td><td>INTERNATIONAL MEALS</td><td>Meals during international business travel.</td></tr><tr><td>61910</td><td>MINOR EQUIPMENT - GENERAL</td><td>Purchase of small equipment that is not large enough to be considered capital equipment.</td></tr><tr><td>69042</td><td>RECOVERY - LAB SERVICES</td><td>Revenue or cost recovery for laboratory services provided.</td></tr><tr><td>63450</td><td>FREIGHT &amp; PARCEL SHIPPING</td><td>Costs for shipping packages or equipment.</td></tr><tr><td>64365</td><td>CONFERENCE FEES</td><td>Registration fees to attend conferences or professional meetings.</td></tr><tr><td>61095</td><td>FIN AID - SEMESTER SPLIT</td><td>Financial aid adjustments split across academic terms.</td></tr><tr><td>64055</td><td>CU FACILITIES CHARGEABLE WORK</td><td>Payments for facilities work performed by Columbia Facilities.</td></tr><tr><td>61925</td><td>MINOR EQUIPMENT - COMPUTERS</td><td>Purchase of smaller computer equipment like laptops or monitors.</td></tr><tr><td>68100</td><td>R&amp;D COMPONENT PARTS - CAPITAL</td><td>Parts purchased for building research equipment that will become capital equipment.</td></tr><tr><td>64330</td><td>SUBSCRIPTIONS</td><td>Payments for journals, software subscriptions, or memberships.</td></tr><tr><td>61160</td><td>GRA TUITION - DIRECT CHARGE</td><td>Tuition charged to a research grant for a graduate research assistant.</td></tr><tr><td>64150</td><td>OFFICE SERVICES - GENERAL</td><td>Payments for office-related services like printing or copying.</td></tr><tr><td>63280</td><td>WEB EXPENSES</td><td>Costs for website hosting, maintenance, or digital services.</td></tr><tr><td>66410</td><td>ALCOHOLIC BEVERAGES</td><td>Purchase of alcoholic beverages for approved events.</td></tr></table></div></div>`},
+  col_account_desc:{label:"Account Description",what:"The plain-language name of the Account code shown on that row.",interpret:"This is the readable label for the cost category. It tells you in plain terms what kind of expense or activity that line represents — for example, Salary and Wages, Fringe Benefit Charge, Supplies and Materials, or Subcontracts.",why:"Account Description makes the report readable without requiring knowledge of numeric account codes. It is the fastest way to scan a report and identify lines that may need attention, look unusual, or fall outside expected spending patterns.",related:"Paired directly with Account. Use alongside Project Budget, Month Actuals, and Budget Balance Available to quickly assess whether the spending level on that category looks appropriate."}
 };
+
 var allClickables = [], tabIndex = -1, activeEl = null, activeKey = null;
 function buildTabList(){ allClickables = Array.from(document.querySelectorAll('.clickable')); }
 function updateTabCounter(){ var c = document.getElementById('tab-counter'); if(tabIndex >= 0){ c.textContent = 'Field ' + (tabIndex + 1) + ' of ' + allClickables.length; c.classList.add('visible'); } else { c.classList.remove('visible'); } }
-function renderField(key){ var d = FIELDS[key]; if(!d) return; var isNav = key.indexOf('nav_') === 0; var badge = isNav ? 'nav-badge' : ''; document.getElementById('explain-content').innerHTML = '<div class="explain-field-name">' + d.label + '</div>' + '<div class="explain-section"><div class="tip-badge ' + badge + '">WHAT IT IS</div><div class="explain-section-body">' + d.what + '</div></div>' + '<div class="explain-section"><div class="tip-badge ' + badge + '">HOW TO INTERPRET</div><div class="explain-section-body">' + d.interpret + '</div></div>' + '<div class="explain-section"><div class="tip-badge ' + badge + '">WHY IT MATTERS</div><div class="explain-section-body">' + d.why + '</div></div>' + '<div class="explain-section"><div class="tip-badge ' + badge + '">RELATED FIELDS</div><div class="explain-section-body">' + d.related + '</div></div>'; document.getElementById('explain-panel').classList.add('open'); document.getElementById('explain-inner').scrollTop = 0; }
+function renderField(key){ var d = FIELDS[key]; if(!d) return; var isNav = key.indexOf('nav_') === 0; var badge = isNav ? 'nav-badge' : ''; document.getElementById('explain-content').innerHTML = '<div class="explain-field-name">' + d.label + '</div>' + '<div class="explain-section"><div class="tip-badge ' + badge + '">WHAT IT IS</div><div class="explain-section-body">' + d.what + '</div></div>' + '<div class="explain-section"><div class="tip-badge ' + badge + '">HOW TO USE</div><div class="explain-section-body">' + d.interpret + '</div></div>' + '<div class="explain-section"><div class="tip-badge ' + badge + '">RELATED FIELDS</div><div class="explain-section-body">' + d.related + '</div></div>' + (d.glossary ? d.glossary : ''); document.getElementById('explain-panel').classList.add('open'); document.getElementById('explain-inner').scrollTop = 0; }
+
+document.getElementById('explain-content').addEventListener('click', function(e) {
+  var btn = e.target.closest('.guide-pill-toggle');
+  if (!btn) return;
+  var targetId = btn.getAttribute('data-guide-target');
+  var panel = document.getElementById(targetId);
+  if (!panel) return;
+  var isOpen = panel.classList.contains('open');
+  panel.classList.toggle('open', !isOpen);
+  btn.classList.toggle('open', !isOpen);
+});
 function renderAcct(code){ var d = ACCT[code]; if(!d) return; var rows = ''; if(d.naturalAccounts && d.naturalAccounts.length){ rows = '<div class="nat-acct-list">'; for(var i = 0; i < d.naturalAccounts.length; i++){ var na = d.naturalAccounts[i]; rows += '<div class="na-row"><div class="na-code">' + na.code + '</div><div><div class="na-name">' + na.desc + '</div><div class="na-def">' + na.def + '</div></div></div>'; } rows += '</div>'; } document.getElementById('explain-content').innerHTML = '<div class="explain-field-name">' + code + ' &ndash; ' + d.label + '</div>' + '<div class="explain-section"><div class="tip-badge acct-badge">WHAT IT COVERS</div><div class="explain-section-body">' + d.definition + '</div></div>' + '<div class="explain-section"><div class="tip-badge acct-badge">HOW TO INTERPRET</div><div class="explain-section-body">' + d.interpret + '</div></div>' + '<div class="explain-section"><div class="tip-badge acct-badge">WHY IT MATTERS</div><div class="explain-section-body">' + d.why + '</div></div>' + (rows ? '<div class="explain-section"><div class="tip-badge acct-badge">NATURAL ACCOUNTS UNDER THIS CODE</div>' + rows + '</div>' : ''); document.getElementById('explain-panel').classList.add('open'); document.getElementById('explain-inner').scrollTop = 0; }
 function openPanel(key, el, isAcct){ if(activeEl === el && activeKey === key){ closePanel(); return; } if(activeEl) activeEl.classList.remove('active'); activeEl = el; activeKey = key; if(el) el.classList.add('active'); if(!isAcct){ tabIndex = allClickables.indexOf(el); renderField(key); } else { renderAcct(key); } updateTabCounter(); }
 function closePanel(){ document.getElementById('explain-panel').classList.remove('open'); if(activeEl){ activeEl.classList.remove('active'); activeEl = null; } activeKey = null; tabIndex = -1; updateTabCounter(); }
 document.querySelectorAll('.clickable').forEach(function(el){ el.addEventListener('click', function(e){ e.stopPropagation(); openPanel(this.getAttribute('data-key'), this, false); }); el.addEventListener('keydown', function(e){ if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openPanel(this.getAttribute('data-key'), this, false); } }); });
 document.querySelectorAll('.acct-desc-clickable').forEach(function(el){ el.addEventListener('click', function(e){ e.stopPropagation(); openPanel(this.getAttribute('data-acct'), this, true); }); el.addEventListener('keydown', function(e){ if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openPanel(this.getAttribute('data-acct'), this, true); } }); });
 document.getElementById('panel-close').addEventListener('click', closePanel);
-document.addEventListener('keydown', function(e){
-  if (e.key === 'Escape') { deactivatePillNav(false); closePanel(); return; }
-
-  if (e.key === 'ArrowUp') {
-    var activeNode = document.activeElement;
-    var tag = activeNode && activeNode.tagName;
-    if (tag !== 'INPUT' && tag !== 'TEXTAREA' && !(activeNode && activeNode.isContentEditable)) {
-      e.preventDefault();
-      activatePillNav();
-    }
-    return;
-  }
-
-  if (e.key === 'ArrowDown' && pillNavActive) {
-    e.preventDefault();
-    deactivatePillNav(true);
-    return;
-  }
-
-  if ((e.key === 'ArrowLeft' || e.key === 'ArrowRight') && pillNavActive) {
-    e.preventDefault();
-    pillFocusIndex = e.key === 'ArrowRight' ? pillFocusIndex + 1 : pillFocusIndex - 1;
-    setPillFocus(pillFocusIndex);
-    var pillEl = getPillEl(pillOrder[pillFocusIndex]);
-    if (pillEl) togglePill(pillEl);
-    return;
-  }
-
-  if (e.key === 'Tab') {
-    var open = document.getElementById('explain-panel').classList.contains('open');
-    if (!open && tabIndex === -1) return;
-    e.preventDefault();
-    if (!allClickables.length) return;
-    tabIndex = e.shiftKey ? (tabIndex <= 0 ? allClickables.length - 1 : tabIndex - 1) : (tabIndex >= allClickables.length - 1 ? 0 : tabIndex + 1);
-    var el = allClickables[tabIndex], key = el.getAttribute('data-key');
-    if (activeEl) activeEl.classList.remove('active');
-    activeEl = el;
-    activeKey = key;
-    el.classList.add('active');
-    el.scrollIntoView({behavior:'smooth', block:'nearest', inline:'nearest'});
-    renderField(key);
-    updateTabCounter();
-  }
-});
+document.addEventListener('keydown', function(e){ if(e.key === 'Escape'){ closePanel(); return; } if(e.key === 'Tab'){ var open = document.getElementById('explain-panel').classList.contains('open'); if(!open && tabIndex === -1) return; e.preventDefault(); if(!allClickables.length) return; tabIndex = e.shiftKey ? (tabIndex <= 0 ? allClickables.length - 1 : tabIndex - 1) : (tabIndex >= allClickables.length - 1 ? 0 : tabIndex + 1); var el = allClickables[tabIndex], key = el.getAttribute('data-key'); if(activeEl) activeEl.classList.remove('active'); activeEl = el; activeKey = key; el.classList.add('active'); el.scrollIntoView({behavior:'smooth', block:'nearest', inline:'nearest'}); renderField(key); updateTabCounter(); } });
 document.getElementById('table-scroll-area').addEventListener('scroll', function(){ document.getElementById('report-thead').classList.toggle('scrolled-past', this.scrollTop > 0); });
 buildTabList();
 </script>
