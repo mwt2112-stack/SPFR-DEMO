@@ -25,7 +25,7 @@
   .report-titles .title-main { font-size: 12px; font-weight: bold; }
   .report-titles .title-sub { font-size: 11px; font-weight: bold; }
   .report-titles .title-date { font-size: 11px; }
-  .meta-section { padding: 4px 12px 4px; display: grid; grid-template-columns: 210px 1.28fr 235px; column-gap: 26px; row-gap: 1px; font-size: 11px; border-bottom: 1px solid #888; align-items: start; }
+  .meta-section { padding: 4px 12px 4px; display: grid; grid-template-columns: 210px 1.28fr 235px; column-gap: 26px; row-gap: 1px; font-size: 11px; border-bottom: none; align-items: start; }
   .meta-col { display: flex; flex-direction: column; gap: 1.5px; min-width: 0; }
   .meta-row { display: flex; gap: 3px; min-width: 0; white-space: nowrap; }
   .meta-label { font-weight: bold; white-space: nowrap; }
@@ -50,14 +50,20 @@
   .report-table thead tr.hdr-group th { background: #fff; font-size: 9.5px; font-weight: bold; text-align: center; padding: 2px 2px 0; border: none; }
   th.hdr-actual-group { border-bottom: 1px solid #666 !important; }
   th.hdr-commit-group { border-bottom: 1px solid #666 !important; }
-  .report-table thead tr.hdr-cols th { background: #fff; text-align: right; font-weight: bold; font-size: 9.5px; padding: 2px 3px; border-top: 1px solid #888; border-bottom: 2px solid #888; vertical-align: bottom; line-height: 1.2; white-space: normal; }
+  .report-table thead tr.hdr-cols th { background: #fff; text-align: right; font-weight: bold; font-size: 9.5px; padding: 2px 3px; border-top: none; border-bottom: 2px solid #888; vertical-align: bottom; line-height: 1.2; white-space: normal; }
+  .report-table thead tr.hdr-cols th.under-group { border-top: 1px solid #666; }
   .report-table thead.scrolled-past tr.hdr-cols th { box-shadow: 0 3px 6px -1px rgba(0,0,0,0.15); }
   .report-table thead tr.hdr-cols th.left { text-align: left; }
   .report-table tbody td { padding: 1px 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; vertical-align: top; }
   .report-table tbody td.r { text-align: right; }
   .report-table tbody td.blue { text-align: right; color: #111; }
   .report-table tbody td.blue.col-spent { color: #00419e; }
+  .report-table tbody td.col-spent { color: #00419e; }
   .report-table tbody td.blue-accrual { text-align: right; color: #00419e; }
+  .report-table tbody td.col-budget { text-align: right; color: #00419e; }
+  tr.total-row td.col-budget { color: #111; }
+  tr.total-row td.col-spent { color: #00419e; }
+  tr.fa-row td { color: #111 !important; }
   .report-table tbody td.neg { color: #111; }
   .report-table tbody td.rneg { text-align: right; color: #111; }
   .report-table tbody tr:hover td { background: #f6f6f6; }
@@ -284,7 +290,8 @@
       <tr class="hdr-group">
         <th colspan="2"></th>
         <th></th><!-- budget header spacer -->
-        <th colspan="4" class="hdr-actual-group clickable" tabindex="0" data-key="actual_to_date_group">Actual to Date (Does not include Accruals)</th>
+        <th colspan="3" class="hdr-actual-group clickable" tabindex="0" data-key="actual_to_date_group">Actual to Date (Does not include Accruals)</th>
+        <th></th><!-- balance before commitment gap — no underline -->
         <th colspan="3" class="hdr-commit-group clickable" tabindex="0" data-key="commitment_group">Commitment</th>
         <th></th><th></th><th></th><th></th>
       </tr>
@@ -292,13 +299,13 @@
         <th class="left clickable" tabindex="0" data-key="col_account">Account</th>
         <th class="left clickable" tabindex="0" data-key="col_account_desc">Account Description</th>
         <th class="right clickable first-hint col-budget" tabindex="0" data-key="project_budget">Project Budget</th>
-        <th class="right clickable col-spent" tabindex="0" data-key="month_actuals">Month Actuals</th>
-        <th class="right clickable col-spent" tabindex="0" data-key="fiscal_year_to_date">Fiscal Year to Date</th>
-        <th class="right clickable col-spent" tabindex="0" data-key="project_to_date">Project to Date</th>
+        <th class="right clickable col-spent under-group" tabindex="0" data-key="month_actuals">Month Actuals</th>
+        <th class="right clickable col-spent under-group" tabindex="0" data-key="fiscal_year_to_date">Fiscal Year to Date</th>
+        <th class="right clickable col-spent under-group" tabindex="0" data-key="project_to_date">Project to Date</th>
         <th class="right clickable" tabindex="0" data-key="balance_before_commitment">Balance Before Commitment</th>
-        <th class="right clickable" tabindex="0" data-key="encumbrance">Encumbrance</th>
-        <th class="right clickable" tabindex="0" data-key="pre_encumbrance">Pre-Encumbrance</th>
-        <th class="right clickable" tabindex="0" data-key="accruals_open_vouchers">Accruals or Open Vouchers</th>
+        <th class="right clickable under-group" tabindex="0" data-key="encumbrance">Encumbrance</th>
+        <th class="right clickable under-group" tabindex="0" data-key="pre_encumbrance">Pre-Encumbrance</th>
+        <th class="right clickable under-group" tabindex="0" data-key="accruals_open_vouchers">Accruals or Open Vouchers</th>
         <th class="right clickable" tabindex="0" data-key="total_actuals_commitments">Total Actuals and Commitments</th>
         <th class="right clickable col-left" tabindex="0" data-key="budget_balance_available">Budget Balance Available</th>
         <th class="right clickable" tabindex="0" data-key="pct_used">% Used</th>
@@ -327,9 +334,9 @@
 <tr class="total-row clickable" tabindex="0" data-key="total_direct_expense"><td colspan="2">Total Direct Expense</td><td class="r col-budget">15,721,200.00</td><td class="r col-spent">1,070,629.31</td><td class="r col-spent">3,893,031.56</td><td class="r col-spent">10,440,630.22</td><td class="r">5,280,569.78</td><td class="r">2,860,610.00</td><td class="r">(4,740.50)</td><td class="r">70,320.00</td><td class="r">13,366,819.72</td><td class="r col-left">2,354,380.28</td><td class="r">85%</td><td class="r">89%</td></tr>
 <tr class="spacer"><td colspan="14"></td></tr>
 <tr><td>69800</td><td class="acct-desc-clickable" data-acct="69800" tabindex="0">F&amp;A DEDUCTION</td><td class="r col-budget">4,278,800.00</td><td class="blue col-spent">299,776.21</td><td class="blue col-spent">1,089,848.84</td><td class="blue col-spent">2,923,376.46</td><td class="r">1,355,423.54</td><td class="blue">0.00</td><td class="blue">0.00</td><td class="blue-accrual">1,882.00</td><td class="r">2,925,258.46</td><td class="r col-left">1,353,541.54</td><td class="r">68%</td><td class="r">72%</td></tr>
-<tr class="total-row clickable" tabindex="0" data-key="total_fa_expense"><td colspan="2">Total F&amp;A Expense</td><td class="r col-budget">4,278,800.00</td><td class="r col-spent">299,776.21</td><td class="r col-spent">1,089,848.84</td><td class="r col-spent">2,923,376.46</td><td class="r">1,355,423.54</td><td class="r">0.00</td><td class="r">0.00</td><td class="r">1,882.00</td><td class="r">2,925,258.46</td><td class="r col-left">1,353,541.54</td><td class="r">68%</td><td class="r">72%</td></tr>
+<tr class="total-row fa-row clickable" tabindex="0" data-key="total_fa_expense"><td colspan="2">Total F&amp;A Expense</td><td class="r col-budget">4,278,800.00</td><td class="r col-spent">299,776.21</td><td class="r col-spent">1,089,848.84</td><td class="r col-spent">2,923,376.46</td><td class="r">1,355,423.54</td><td class="r">0.00</td><td class="r">0.00</td><td class="r">1,882.00</td><td class="r">2,925,258.46</td><td class="r col-left">1,353,541.54</td><td class="r">68%</td><td class="r">72%</td></tr>
 <tr class="spacer"><td colspan="14"></td></tr>
-<tr class="total-row grand clickable" tabindex="0" data-key="total_expense"><td colspan="2">Total Expense</td><td class="r col-budget">20,000,000.00</td><td class="r col-spent">1,370,405.52</td><td class="r col-spent">4,982,880.40</td><td class="r col-spent">13,364,006.68</td><td class="r">6,635,993.32</td><td class="r">2,860,610.00</td><td class="r">(4,740.50)</td><td class="r">72,202.00</td><td class="r">16,292,078.18</td><td class="r col-left">3,707,921.82</td><td class="r">81%</td><td class="r">86%</td></tr>
+<tr class="total-row grand clickable" tabindex="0" data-key="total_expense"><td colspan="2">Total Expense</td><td class="r col-budget">20,000,000.00</td><td class="r col-spent">1,370,405.52</td><td class="r col-spent">4,982,880.40</td><td class="r col-spent">13,364,006.68</td><td class="r">6,635,993.32</td><td class="r">2,860,610.00</td><td class="r">(4,740.50)</td><td class="r blue-accrual">72,202.00</td><td class="r">16,292,078.18</td><td class="r col-left">3,707,921.82</td><td class="r">81%</td><td class="r">86%</td></tr>
     </tbody>
   </table>
   </div>
